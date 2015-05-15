@@ -69,7 +69,7 @@ static const int HEXBOT_HOME_OFFSETS_ENCODER[18]={
 
 /////////////////////////////////////////////////////////////
 
-#define LOG_INTERVAL 10  //log data every LOG_INTERVAL cycle
+#define LOG_INTERVAL 1  //log data every LOG_INTERVAL cycle
 #define LOG_MINUTES  20
 
 //changed by xyl 20141120

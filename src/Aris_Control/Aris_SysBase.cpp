@@ -708,7 +708,7 @@ void CSysBase::RealtimeCore(void* arg)
 
 		//100HZ to NRT
 
-		if(m_cycleCount%10==0)
+		if(m_cycleCount%LOG_INTERVAL==0)
 		{
 
 			/*
