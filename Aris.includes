@@ -5,3 +5,5 @@ src/Aris_Core
 src/Aris_DynKer
 src/Aris_ExpCal
 src/Aris_Plan
+/usr/xenomai/include
+/opt/etherlab/include

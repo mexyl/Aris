@@ -25,11 +25,13 @@ Aris::RT_CONTROL::ACTUATION::ACTUATION()
 
 Aris::RT_CONTROL::ACTUATION::~ACTUATION()
 {
+
 };
 
 int Aris::RT_CONTROL::ACTUATION::SetSysInitializer(FuncPtrInit p_Initializer)
 {
 	return sysBase->SetSysInitializer(p_Initializer);
+
 };
 
 int  Aris::RT_CONTROL::ACTUATION::SysInit(CSysInitParameters p_Param)
@@ -626,27 +628,3 @@ int Aris::RT_CONTROL::ACTUATION::Load_XML_PrintMessage()
 {
 	return sysBase->Load_XML_PrintMessages();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
