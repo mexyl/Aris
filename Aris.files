@@ -38,3 +38,4 @@ src/Aris_ExpCal/Aris_ExpCal.cpp
 src/Aris_ExpCal/Aris_ExpCal.h
 src/Aris_Plan/Aris_Plan.cpp
 src/Aris_Plan/Aris_Plan.h
+CMakeLists.txt

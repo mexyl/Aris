@@ -117,10 +117,9 @@ add_library(Aris_Control STATIC ${FULL_SRC})
 set(HEADER_FILES Aris_Control.h Aris_ControlData.h)
 PREPEND(FULL_SRC ${PROJECT_SOURCE_DIR}/src/Aris_Control ${HEADER_FILES})
 set(INCLUDE_HEADER_FILES ${INCLUDE_HEADER_FILES} ${FULL_SRC})
-<<<<<<< HEAD
-target_include_directories(Aris_Control PRIVATE ${ARIS_COMMOM_HEADERS} ${ETHERLAB_INCLUDE_DIRECTORIES} ${PROJECT_SOURCE_DIR}/src/Aris_Core ${XENOMAI_INCLUDE_DIRECTORIES})
-=======
->>>>>>> 953355b07e842c90c7531c6a694c25c6fc58b52f
+
+#target_include_directories(Aris_Control PRIVATE ${ARIS_COMMOM_HEADERS} ${ETHERLAB_INCLUDE_DIRECTORIES} ${PROJECT_SOURCE_DIR}/src/Aris_Core ${XENOMAI_INCLUDE_DIRECTORIES})
+
 endif(UNIX)
 
 ################################### build demos for aris_Core ####################################
