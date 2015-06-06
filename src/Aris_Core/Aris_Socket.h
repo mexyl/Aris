@@ -1,9 +1,11 @@
 ﻿#ifndef ARIS_SOCKET_H_
 #define ARIS_SOCKET_H_
 
-#include "Platform.h"
-#include "Aris_Thread.h"
-#include "Aris_Core.h"
+#include <functional>
+
+#include <Platform.h>
+#include <Aris_Thread.h>
+#include <Aris_Core.h>
 
 namespace Aris
 {
@@ -14,17 +16,19 @@ namespace Aris
 		*/
 		class CONN
 		{
-			friend void* _ConnReceiveConnectionThreadFunc(void* pConn);
-			friend void* _ConnReceiveDataThreadFunc(void* pConn);
-
 		private:
+			struct CONN_STRUCT;
+			CONN_STRUCT *pConnStruct;
+			static void _ReceiveThread(CONN::CONN_STRUCT* pCONN_STRUCT);
+			static void _AcceptThread(CONN::CONN_STRUCT* pCONN_STRUCT);
+
 #ifdef PLATFORM_IS_WINDOWS 
-			const static int _SIZE = 650;
+			char _pData[650];
 #endif
 #ifdef PLATFORM_IS_LINUX 
-			const static int _SIZE = 328;
+			char _pData[400];
 #endif
-			char _pData[_SIZE];
+			
 
 		public:
 			enum STATE
@@ -65,40 +69,31 @@ namespace Aris
 			/** \brief 当Socket作为服务器端使用时，关闭服务器端
 			*
 			*/
-			int CloseServer();
-			/** \brief 本Socket作为客户端来使用，连接对应的服务器IP和端口
-			*
-			*\param address 服务器的IP地址，例如"192.168.1.1"
-			*\param port 服务器的端口号，例如"1234"
-			*/
 			int Connect(const char *address, const char *port);
-			/** \brief 当CONN作为客户端使用时，关闭客户端
+			/** \brief 关闭客户端
 			*
 			*/
-			int DisConnect();
+			void Close();
 			/** \brief 设置收到数据时，CONN所需要执行的函数
 			*
-			* \param OnReceivedData 为形如int OnReceivedData(CONN * pConn, CONN_DATA &data){return 0}的函数。每当CONN收到数据后在CONN自己的内部线程中执行。
+			* \param OnReceivedData 为形如int(CONN*, Aris::Core::MSG &)的函数。每当CONN收到数据后在CONN自己的内部线程中执行。
 			*/
-			int SetCallBackOnReceivedData(int(*OnReceivedData)(CONN *, Aris::Core::MSG &) = 0);
+			int SetCallBackOnReceivedData(std::function<int(CONN*, Aris::Core::MSG &)> = nullptr);
 			/** \brief 设置服务器端收到连接后所执行的函数
 			*
-			* \param OnReceivedConnection 为形如int OnReceivedData(CONN * pConn, int Socket, struct sockaddr_in addr, socklen_t len){return 0}的函数。每当CONN收到连接后在CONN自己的内部线程中执行。
+			* \param OnReceivedConnection 为形如int(CONN*, const char* pRemoteIP, int remotePort)的函数。每当CONN收到连接后在CONN自己的内部线程中执行。
 			*/
-			int SetCallBackOnReceivedConnection(int(*OnReceivedConnection)(CONN *,const char* pRemoteIP,int remotePort) = 0);
+			int SetCallBackOnReceivedConnection(std::function<int(CONN*, const char* pRemoteIP, int remotePort)> = nullptr);
 			/** \brief 设置服务器端收到连接后所执行的函数
 			*
-			* \param OnLoseConnection 为形如int OnReceivedData(CONN * pConn){return 0}的函数。每当CONN失去连接后在CONN自己的内部线程中执行。
+			* \param OnLoseConnection 为形如int(CONN*)的函数。每当CONN失去连接后在CONN自己的内部线程中执行。
 			*/
-			int SetCallBackOnLoseConnection(int(*OnLoseConnection)(CONN *) = 0);
+			int SetCallBackOnLoseConnection(std::function<int(CONN*)> = nullptr);
 			/** \brief 使用CONN发送数据
 			*
 			* \param data 待发送的数据。
 			*/
 			int SendData(const Aris::Core::MSG &data);
-
-		private:
-			bool _TerminateConnThread();
 		};
 	}
 }
