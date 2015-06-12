@@ -5,7 +5,7 @@ using namespace std;
 
 using namespace Aris::Core;
 
-Aris::Core::CONN VisualSystem, ControlSystem;
+Aris::Core::CONN VisualSystem, Server;
 
 
 /*当和视觉客户端建立连接时，执行本函数*/
@@ -49,7 +49,7 @@ int OnVisualSystemDataReceived(Aris::Core::MSG &msg)
 		if (strcmp(answer, "yes") == 0)
 		{
 			Aris::Core::MSG data;
-			ControlSystem.SendData(data);
+			Server.SendData(data);
 			cout << "command robot to walk" << endl;
 			break;
 		}
@@ -108,7 +108,7 @@ int OnControlSystemLost(Aris::Core::MSG &msg)
 {
 	cout << "Control system connection lost" << endl;
 
-	int res=ControlSystem.StartServer("5689");
+	int res=Server.StartServer("5689");
 	cout<<"err num is:"<<res<<endl;
 
 	return 0;
@@ -128,7 +128,7 @@ int OnConnDataReceived(Aris::Core::CONN *pConn, Aris::Core::MSG &msg)
 		msg.SetMsgID(VisualSystemDataReceived);
 		Aris::Core::PostMsg(msg);
 	}
-	else if (pConn == &ControlSystem)
+	else if (pConn == &Server)
 	{
 		msg.SetMsgID(ControlTrajectoryFinished);
 		Aris::Core::PostMsg(msg);
@@ -150,7 +150,7 @@ int OnConnectionReceived(Aris::Core::CONN *pConn, const char *addr, int port)
 		
 		PostMsg(msg);
 	}
-	else if (pConn == &ControlSystem)
+	else if (pConn == &Server)
 	{
 		msg.SetMsgID(ControlSystemConnected);
 		msg.Copy(&port, sizeof(int));
@@ -166,7 +166,7 @@ int OnConnectionLost(Aris::Core::CONN *pConn)
 {
 	if (pConn == &VisualSystem)
 		PostMsg(Aris::Core::MSG(VisualSystemLost));
-	else if (pConn == &ControlSystem)
+	else if (pConn == &Server)
 		PostMsg(Aris::Core::MSG(ControlSystemLost));
 
 	return 0;

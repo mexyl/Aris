@@ -47,13 +47,13 @@ int main()
 		VisualSystem.SetCallBackOnReceivedConnection(OnConnectionReceived);
 		VisualSystem.SetCallBackOnReceivedData(OnConnDataReceived);
 		VisualSystem.SetCallBackOnLoseConnection(OnConnectionLost);
-		ControlSystem.SetCallBackOnReceivedConnection(OnConnectionReceived);
-		ControlSystem.SetCallBackOnReceivedData(OnConnDataReceived);
-		ControlSystem.SetCallBackOnLoseConnection(OnConnectionLost);
+		Server.SetCallBackOnReceivedConnection(OnConnectionReceived);
+		Server.SetCallBackOnReceivedData(OnConnDataReceived);
+		Server.SetCallBackOnLoseConnection(OnConnectionLost);
 		
 		/*打开客户端*/
 		VisualSystem.StartServer("5688");
-		ControlSystem.StartServer("5689");
+		Server.StartServer("5689");
 
 
 		/*开始消息循环*/

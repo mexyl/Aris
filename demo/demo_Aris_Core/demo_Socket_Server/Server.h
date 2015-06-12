@@ -25,4 +25,4 @@ int OnConnDataReceived(Aris::Core::CONN *pConn, Aris::Core::MSG &data);
 int OnConnectionReceived(Aris::Core::CONN *pConn, const char* addr,int port);
 int OnConnectionLost(Aris::Core::CONN *pConn);
 
-extern Aris::Core::CONN VisualSystem, ControlSystem;
+extern Aris::Core::CONN VisualSystem, Server;
