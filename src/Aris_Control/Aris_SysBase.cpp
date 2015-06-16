@@ -730,7 +730,7 @@ void CSysBase::RealtimeCore(void* arg)
 			ret = rt_dev_sendto(m_xddp_socket_data_rt,&m_logDataRC,sizeof(m_logDataRC),0,NULL,0);
 			if(ret==-12)
 			{
-				rt_printf("WARN:Internal communication buffer 2 is full.%lld\n",m_cycleCount);
+                //rt_printf("WARN:Internal communication buffer 2 is full.%lld\n",m_cycleCount);
 			}
 
 			//rt_printf("%d\n",ret);
@@ -816,7 +816,7 @@ int CSysBase::NRT_SendDataRaw(const void* p_ptrData, const int p_dataLength)
 		rt_printf("NRT_SendData: NULL ptr is fed\n");
 		return -14;//EFAULT 14 bad address
 	}
-	//send all in one time
+    //send all in one
 	ret=write(m_xddp_fd,p_ptrData,p_dataLength);
 	//return ret-RT_CONN_DATA_HEADSIZE;
 	return ret;
@@ -1065,7 +1065,7 @@ void *CSysBase::dataServer(void* arg)
 				 */
 				fwrite(&m_logMachineDataBuffer,sizeof(m_logMachineDataBuffer),1,fp);
 
-				if(m_logCount%1000==0)
+                if(m_logCount%2000==0)
 				{
 					printf("TIME:%lld %d POS:%d VEL%d POD:%d\n",m_cycleCount,
 							m_logDataBuffer.m_feedbackData.m_motorData[0].StatusWord,

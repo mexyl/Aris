@@ -718,6 +718,9 @@ void CSysPID::DoPID(ElmoMotor::CElmoMotorData* p_Data, ElmoMotor::CElmoMotorData
 		p_Order[i].Position = PositionTarget;
 		p_Order[i].Velocity = VelocityTarget;
 
+        // just for test
+//        p_Order[i].Velocity = 65536/2;
+
 
 	}
 };
