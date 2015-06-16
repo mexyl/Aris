@@ -171,7 +171,7 @@ int main()
 		
 		/*打开客户端*/
 		VisualSystem.StartServer("5688");
-		ControlSystem.StartServer("5689");
+        ControlSystem.StartServer("5689");
 
 		/*开始消息循环*/
 		Aris::Core::RunMsgLoop();
