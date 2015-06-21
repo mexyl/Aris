@@ -739,6 +739,7 @@ void CSysBase::RealtimeCore(void* arg)
         }
 
         m_cycleCount++;
+
     }
 };
 

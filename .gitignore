@@ -45,3 +45,7 @@ build
 
 # python executables
 *.pyc
+
+# temp files
+.*.*.swp
+.*.swp

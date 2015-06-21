@@ -55,7 +55,6 @@ namespace Aris
                 }
                 */
         };
-
         CSysInitParameters::~CSysInitParameters()
         {
 
@@ -65,19 +64,21 @@ namespace Aris
         //{
         //	return *this;
         //};
-
         CForceData& CForceData::operator=(const CForceData& other)
         {
+            memcpy(this,&other,sizeof(*this));
             return *this;
         }
 
         CMotorData& CMotorData::operator=(const CMotorData& other)
         {
+            memcpy(this,&other,sizeof(*this));
             return *this;
         };
 
         CMachineData& CMachineData::operator=(const CMachineData& other)
         {
+            memcpy(this,&other,sizeof(*this));
             return *this;
         };
 
