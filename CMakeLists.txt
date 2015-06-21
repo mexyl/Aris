@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
+set( CMAKE_EXPORT_COMPILE_COMMANDS 1)
 # add prefix to every string in a variable
 FUNCTION(PREPEND var prefix)
    SET(listVar "")
@@ -111,7 +112,7 @@ set(INCLUDE_HEADER_FILES ${INCLUDE_HEADER_FILES} ${FULL_H})
 
 # Aris_Control project only in linux
 if(UNIX)
-set(SOURCE_FILES Aris_Control.cpp Aris_ControlData.cpp Aris_Sensor.cpp Aris_Device.cpp Aris_SysBase.cpp )
+    set(SOURCE_FILES Aris_Control.cpp Aris_ControlData.cpp Aris_Sensor.cpp Aris_Device.cpp Aris_SysBase.cpp Aris_ATIForceSensor.cpp)
 PREPEND(FULL_SRC src/Aris_Control ${SOURCE_FILES})
 add_library(Aris_Control STATIC ${FULL_SRC})
 set(HEADER_FILES Aris_Control.h Aris_ControlData.h)

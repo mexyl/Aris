@@ -59,12 +59,13 @@ static const int HEXBOT_HOME_OFFSETS_ENCODER[18]={
 // IO number settings
 #define ACTUAL_EL3104_NUM 2
 #define ACTUAL_EL4002_NUM 1
-
+#define ACTUAL_ATI_FORCE_SENSOR_NUM 1
 // Devices' positions on the Ethercat network
-#define ECAT_POS_COUPLER 18
+#define ECAT_POS_COUPLER 19
 #define ECAT_START_POS_EL3104  (ECAT_POS_COUPLER + 1)
 #define ECAT_START_POS_EL4002  (ECAT_POS_COUPLER + 3)
-#define ECAT_START_POS_ELMODRIVE  0
+#define ECAT_START_POS_ELMODRIVE  1
+#define ECAT_START_POS_ATI_FORCE_SENSOR  0
 // Motor Default Operation Mode
 
 #define DEFAULT_OPERATION_MODE 9

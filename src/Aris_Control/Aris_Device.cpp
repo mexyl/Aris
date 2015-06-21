@@ -114,10 +114,10 @@ int CElmoMotor::SetEtherCATPosition(
 
 int CElmoMotor::Initialize(ec_master_t **p_master,int homeOffset,int driverID,SMotorGeneralSettings& settings)
 {
-	m_driverID= driverID;
+    m_driverID= driverID;
     m_pMaster=*p_master;
     
-   // printf("2\n");
+    // printf("2\n");
     m_pDomainAll = ecrt_master_create_domain(m_pMaster);
 
     if (!m_pDomainAll)
@@ -326,7 +326,7 @@ int CElmoMotor::CheckState()//CheckState Each Cycle
     UpdateMotorState();
     if( m_currentState == Aris::RT_CONTROL::EMSTAT_FAULT )
     {
-    	m_motorCommandData.ControlWord=0x80;
+        m_motorCommandData.ControlWord=0x80;
         return -1;
     }
     else
@@ -336,18 +336,18 @@ int CElmoMotor::CheckState()//CheckState Each Cycle
 }
 
 /*void CElmoMotor::SetOffset(int offset) // set the offset of the starting position at the beginning
-{
-    m_homeOffset=offset;
-}*/
+  {
+  m_homeOffset=offset;
+  }*/
 
 void CElmoMotor::SetMotorCommand(Aris::RT_CONTROL::EServoCommand p_command)
 {
-	m_motorCommand.command=p_command;
+    m_motorCommand.command=p_command;
 }
 
 void CElmoMotor::SetMotorMode(Aris::RT_CONTROL::EOperationMode p_mode)
 {
-	m_motorCommand.operationMode=p_mode;
+    m_motorCommand.operationMode=p_mode;
 }
 
 int CElmoMotor::DoCommand()
@@ -356,143 +356,143 @@ int CElmoMotor::DoCommand()
 
     if(m_isMotorCMDComplete==false)
     {
-    	if(m_currentState==Aris::RT_CONTROL::EMSTAT_FAULT)
-    	{
-    		m_motorCommandData.ControlWord=0x80;
-    		return -1;
-    	}
+        if(m_currentState==Aris::RT_CONTROL::EMSTAT_FAULT)
+        {
+            m_motorCommandData.ControlWord=0x80;
+            return -1;
+        }
 
-    	    switch(m_nextState)
-    	    {
-
-
-    	    case Aris::RT_CONTROL::EMSTAT_POWEREDOFF:
-
-        	    	m_motorCommandData.ControlWord = 0x00;  // require power off immediately
-        	    	m_motorCommandData.Mode=m_motorCommand.operationMode;
-
-     	        break;
-
-    	    case Aris::RT_CONTROL::EMSTAT_STOPPED:
-
-        	    	m_motorCommandData.ControlWord = 0x06;  // require stop
-        	    	m_motorCommandData.Mode=m_motorCommand.operationMode;
+        switch(m_nextState)
+        {
 
 
-    	        break;
+            case Aris::RT_CONTROL::EMSTAT_POWEREDOFF:
 
-    	    case Aris::RT_CONTROL::EMSTAT_ENABLED:
+                m_motorCommandData.ControlWord = 0x00;  // require power off immediately
+                m_motorCommandData.Mode=m_motorCommand.operationMode;
 
-    	   	    	m_motorCommandData.Mode=m_motorCommand.operationMode;
-    	    	        if ( m_currentState == Aris::RT_CONTROL::EMSTAT_POWEREDOFF)
-    	    	        {
-    	    	        	m_motorCommandData.ControlWord = 0x06;  // require STOPPED state firstly
-    	    	        }
-    	    	        else if( m_currentState == Aris::RT_CONTROL::EMSTAT_STOPPED)
-    	    	        	m_motorCommandData.ControlWord = 0x07;  // require ENABLE state
+                break;
 
+            case Aris::RT_CONTROL::EMSTAT_STOPPED:
 
-    	        break;
-
-    	    case Aris::RT_CONTROL::EMSTAT_RUNNING:
-
-        	    	m_motorCommandData.Mode=m_motorCommand.operationMode;
-        	        if ( m_currentState == Aris::RT_CONTROL::EMSTAT_POWEREDOFF )
-        	        	m_motorCommandData.ControlWord = 0x06;  // require STOPPED state firstly
-        	        else if ( m_currentState == Aris::RT_CONTROL::EMSTAT_STOPPED )
-        	        	m_motorCommandData.ControlWord = 0x07;  // require ENABLE state firstly
-        	        else if ( m_currentState == Aris::RT_CONTROL::EMSTAT_ENABLED)
-        	        {
-         	        	m_motorCommandData.ControlWord = 0x0F;  // require RUNNING state
-        	        }
+                m_motorCommandData.ControlWord = 0x06;  // require stop
+                m_motorCommandData.Mode=m_motorCommand.operationMode;
 
 
-    	        break;
+                break;
 
-    	    case Aris::RT_CONTROL::EMSTAT_HOMING:
-    	    	//m_motorCommandData.Mode=m_motorCommand.operationMode;
-    	    	if (m_currentState == Aris::RT_CONTROL::EMSTAT_POWEREDOFF)
-    	    		m_motorCommandData.ControlWord = 0x06;  // require STOPPED state firstly
-    	    	else if(m_currentState==Aris::RT_CONTROL::EMSTAT_STOPPED)
-    	    		m_motorCommandData.ControlWord=0x07;
-    	    	else if(m_currentState==Aris::RT_CONTROL::EMSTAT_ENABLED)
-    	    		m_motorCommandData.ControlWord=0x0F;
-    	    	else if(m_currentState==Aris::RT_CONTROL::EMSTAT_RUNNING)
-        	    	{
-        	    		m_motorCommandData.Mode=6;//homing mode
-                         rt_printf("going home\n");
-        	    	}
+            case Aris::RT_CONTROL::EMSTAT_ENABLED:
 
-        	    	else if(m_currentState==Aris::RT_CONTROL::EMSTAT_HOMING)
-        	    		if(m_subState==SUB_FINISHED)
-        	    		{
-        	    			m_isHomingFinished=true;
+                m_motorCommandData.Mode=m_motorCommand.operationMode;
+                if ( m_currentState == Aris::RT_CONTROL::EMSTAT_POWEREDOFF)
+                {
+                    m_motorCommandData.ControlWord = 0x06;  // require STOPPED state firstly
+                }
+                else if( m_currentState == Aris::RT_CONTROL::EMSTAT_STOPPED)
+                    m_motorCommandData.ControlWord = 0x07;  // require ENABLE state
 
-        	    	 	 	rt_printf("homng finished\n");
-        	    		}
-        	    		else //SUB_READY or SUB_BUSY
-        	    		{
 
-        	    			// keep going home
-        	    			m_motorCommandData.ControlWord=0x1F;
-        	    		}
-    	    //	}
+                break;
 
-    	    	break;
-    	    case Aris::RT_CONTROL::EMSTAT_INVALID:
-    	    	break;
-    	    }
+            case Aris::RT_CONTROL::EMSTAT_RUNNING:
+
+                m_motorCommandData.Mode=m_motorCommand.operationMode;
+                if ( m_currentState == Aris::RT_CONTROL::EMSTAT_POWEREDOFF )
+                    m_motorCommandData.ControlWord = 0x06;  // require STOPPED state firstly
+                else if ( m_currentState == Aris::RT_CONTROL::EMSTAT_STOPPED )
+                    m_motorCommandData.ControlWord = 0x07;  // require ENABLE state firstly
+                else if ( m_currentState == Aris::RT_CONTROL::EMSTAT_ENABLED)
+                {
+                    m_motorCommandData.ControlWord = 0x0F;  // require RUNNING state
+                }
+
+
+                break;
+
+            case Aris::RT_CONTROL::EMSTAT_HOMING:
+                //m_motorCommandData.Mode=m_motorCommand.operationMode;
+                if (m_currentState == Aris::RT_CONTROL::EMSTAT_POWEREDOFF)
+                    m_motorCommandData.ControlWord = 0x06;  // require STOPPED state firstly
+                else if(m_currentState==Aris::RT_CONTROL::EMSTAT_STOPPED)
+                    m_motorCommandData.ControlWord=0x07;
+                else if(m_currentState==Aris::RT_CONTROL::EMSTAT_ENABLED)
+                    m_motorCommandData.ControlWord=0x0F;
+                else if(m_currentState==Aris::RT_CONTROL::EMSTAT_RUNNING)
+                {
+                    m_motorCommandData.Mode=6;//homing mode
+                    rt_printf("going home\n");
+                }
+
+                else if(m_currentState==Aris::RT_CONTROL::EMSTAT_HOMING)
+                    if(m_subState==SUB_FINISHED)
+                    {
+                        m_isHomingFinished=true;
+
+                        rt_printf("homng finished\n");
+                    }
+                    else //SUB_READY or SUB_BUSY
+                    {
+
+                        // keep going home
+                        m_motorCommandData.ControlWord=0x1F;
+                    }
+                //	}
+
+                break;
+        case Aris::RT_CONTROL::EMSTAT_INVALID:
+                break;
     }
+}
 
-    return 0;  // No error
+return 0;  // No error
 }
 
 void CElmoMotor::UpdateMotorState()
 {
-	int motormode=m_motorFeedbackData.Mode;
-	switch(motormode)
-	{
-	case 8:
-		m_motorMode=Aris::RT_CONTROL::OMD_CYCLICPOS;
-		break;
-	case 9:
-		m_motorMode=Aris::RT_CONTROL::OMD_CYCLICVEL;
-		break;
-	case 10:
-		m_motorMode=Aris::RT_CONTROL::OMD_CYCLICTORQ;
-		break;
-	//case 6:
-	//	m_motorMode=Aris::RT_CONTROL::OM_HOMING;
-	//	break;
-	default:
-		m_motorMode=Aris::RT_CONTROL::OMD_INVALID;
-		break;
-	}
+    int motormode=m_motorFeedbackData.Mode;
+    switch(motormode)
+    {
+        case 8:
+            m_motorMode=Aris::RT_CONTROL::OMD_CYCLICPOS;
+            break;
+        case 9:
+            m_motorMode=Aris::RT_CONTROL::OMD_CYCLICVEL;
+            break;
+        case 10:
+            m_motorMode=Aris::RT_CONTROL::OMD_CYCLICTORQ;
+            break;
+            //case 6:
+            //	m_motorMode=Aris::RT_CONTROL::OM_HOMING;
+            //	break;
+        default:
+            m_motorMode=Aris::RT_CONTROL::OMD_INVALID;
+            break;
+    }
 
 
-	uint motorState=m_motorFeedbackData.StatusWord;
+    uint motorState=m_motorFeedbackData.StatusWord;
     int motorState_0x000F = (motorState& 0x000F);
     switch (motorState_0x000F)
     {
-    case 0x0000:
-    	m_currentState=Aris::RT_CONTROL::EMSTAT_POWEREDOFF;
-    	//rt_printf("current state pwoered off\n");
-        break;
-    case 0x0001:
-    	m_currentState=Aris::RT_CONTROL::EMSTAT_STOPPED;
-        break;
-    case 0x0003:
-    	m_currentState=Aris::RT_CONTROL::EMSTAT_ENABLED;
-    	break;
-    case 0x0007:
-    	if(m_motorFeedbackData.Mode==6)
-    		m_currentState=Aris::RT_CONTROL::EMSTAT_HOMING;
-    	else
-    		m_currentState=Aris::RT_CONTROL::EMSTAT_RUNNING;
-    	break;
-    default:	  // Motor has fault
-    	m_currentState=Aris::RT_CONTROL::EMSTAT_FAULT;
-    	break;
+        case 0x0000:
+            m_currentState=Aris::RT_CONTROL::EMSTAT_POWEREDOFF;
+            //rt_printf("current state pwoered off\n");
+            break;
+        case 0x0001:
+            m_currentState=Aris::RT_CONTROL::EMSTAT_STOPPED;
+            break;
+        case 0x0003:
+            m_currentState=Aris::RT_CONTROL::EMSTAT_ENABLED;
+            break;
+        case 0x0007:
+            if(m_motorFeedbackData.Mode==6)
+                m_currentState=Aris::RT_CONTROL::EMSTAT_HOMING;
+            else
+                m_currentState=Aris::RT_CONTROL::EMSTAT_RUNNING;
+            break;
+        default:	  // Motor has fault
+            m_currentState=Aris::RT_CONTROL::EMSTAT_FAULT;
+            break;
     }
 
     if (m_currentState==Aris::RT_CONTROL::EMSTAT_HOMING)
@@ -506,98 +506,98 @@ void CElmoMotor::UpdateMotorState()
         else if ( (motorState & 0x0400) == 0 ) // the TARGET REACHED bit is not set
         {
             m_subState=SUB_BUSY;
-         }
+        }
         else
             m_subState=SUB_READY;
     }
 
 
-	if(m_currentState!=_currentState)
-	{
-		//rt_printf("motor 0 operation mode: %d\n",motormode);
-		//rt_printf("motor 0 operation mode command: %d\n",m_motorCommand.operationMode);
+    if(m_currentState!=_currentState)
+    {
+        //rt_printf("motor 0 operation mode: %d\n",motormode);
+        //rt_printf("motor 0 operation mode command: %d\n",m_motorCommand.operationMode);
 
-		//rt_printf("Aris_Device:motor state changed from %s to %s.\n",ServoStateName[_currentState],ServoStateName[m_currentState]);
-	    rt_printf("Device Number %d:",m_driverID);
-	    switch(m_currentState)
-	    {
-	    case Aris::RT_CONTROL::EMSTAT_POWEREDOFF:
-	    	rt_printf(print_poweredoff);
-	    	rt_printf("\n");
+        //rt_printf("Aris_Device:motor state changed from %s to %s.\n",ServoStateName[_currentState],ServoStateName[m_currentState]);
+        rt_printf("Device Number %d:",m_driverID);
+        switch(m_currentState)
+        {
+            case Aris::RT_CONTROL::EMSTAT_POWEREDOFF:
+                rt_printf(print_poweredoff);
+                rt_printf("\n");
 
-	    break;
+                break;
 
-	    case Aris::RT_CONTROL::EMSTAT_STOPPED:
-	    	rt_printf(print_stop);
-	    	rt_printf("\n");
-	    break;
+            case Aris::RT_CONTROL::EMSTAT_STOPPED:
+                rt_printf(print_stop);
+                rt_printf("\n");
+                break;
 
-	    case Aris::RT_CONTROL::EMSTAT_ENABLED:
-	    	rt_printf(print_enabled);
-	    	rt_printf("\n");
-	    break;
+            case Aris::RT_CONTROL::EMSTAT_ENABLED:
+                rt_printf(print_enabled);
+                rt_printf("\n");
+                break;
 
-	    case Aris::RT_CONTROL::EMSTAT_HOMING:
-	    	rt_printf(print_homing);
-	    	rt_printf("\n");
-	    break;
+            case Aris::RT_CONTROL::EMSTAT_HOMING:
+                rt_printf(print_homing);
+                rt_printf("\n");
+                break;
 
-	    case Aris::RT_CONTROL::EMSTAT_RUNNING:
-	    	rt_printf(print_running);
-	    	rt_printf("\n");
-	    break;
+            case Aris::RT_CONTROL::EMSTAT_RUNNING:
+                rt_printf(print_running);
+                rt_printf("\n");
+                break;
 
-	    case Aris::RT_CONTROL::EMSTAT_FAULT:
-	    	rt_printf(print_fault);
-	    	rt_printf("\n");
-	    break;
+            case Aris::RT_CONTROL::EMSTAT_FAULT:
+                rt_printf(print_fault);
+                rt_printf("\n");
+                break;
 
-	    }
-		_currentState=m_currentState;
-	}
-
-
-
-	if(m_isHomingFinished==true&&m_motorCommand.command==Aris::RT_CONTROL::EMCMD_GOHOME)
- 	{
-		m_motorCommand.command=Aris::RT_CONTROL::EMCMD_RUNNING;
-	}
+        }
+        _currentState=m_currentState;
+    }
 
 
-	//rt_printf("currentstate:%d\n",m_currentState);
-	m_nextState=m_stateMachine[m_currentState][m_motorCommand.command];
 
-   //  rt_printf("motor command in motor level: %d\n",m_motorCommand.command);
-   //  rt_printf("motor state in motor level: %d\n",m_currentState);
-   //  rt_printf("motor next state in motor level: %d\n",m_nextState);
+    if(m_isHomingFinished==true&&m_motorCommand.command==Aris::RT_CONTROL::EMCMD_GOHOME)
+    {
+        m_motorCommand.command=Aris::RT_CONTROL::EMCMD_RUNNING;
+    }
 
-	if(m_nextState==m_currentState&&m_motorCommand.operationMode==m_motorFeedbackData.Mode&&m_currentState!=Aris::RT_CONTROL::EMSTAT_HOMING)
-	{
-		m_isMotorCMDComplete=true;
- 	}
 
-	else if(m_currentState==Aris::RT_CONTROL::EMSTAT_HOMING&&m_isHomingFinished==true)
-	{
+    //rt_printf("currentstate:%d\n",m_currentState);
+    m_nextState=m_stateMachine[m_currentState][m_motorCommand.command];
 
-		if(m_motorCommand.operationMode==8||m_motorCommand.operationMode==9||m_motorCommand.operationMode==10)
-			m_motorCommandData.Mode=m_motorCommand.operationMode;
-		else
-			m_motorCommandData.Mode=DEFAULT_OPERATION_MODE;//NEED MUST
+    //  rt_printf("motor command in motor level: %d\n",m_motorCommand.command);
+    //  rt_printf("motor state in motor level: %d\n",m_currentState);
+    //  rt_printf("motor next state in motor level: %d\n",m_nextState);
 
-		m_isMotorCMDComplete=true;
-	}
-	else
-		m_isMotorCMDComplete=false;
-  }
+    if(m_nextState==m_currentState&&m_motorCommand.operationMode==m_motorFeedbackData.Mode&&m_currentState!=Aris::RT_CONTROL::EMSTAT_HOMING)
+    {
+        m_isMotorCMDComplete=true;
+    }
+
+    else if(m_currentState==Aris::RT_CONTROL::EMSTAT_HOMING&&m_isHomingFinished==true)
+    {
+
+        if(m_motorCommand.operationMode==8||m_motorCommand.operationMode==9||m_motorCommand.operationMode==10)
+            m_motorCommandData.Mode=m_motorCommand.operationMode;
+        else
+            m_motorCommandData.Mode=DEFAULT_OPERATION_MODE;//NEED MUST
+
+        m_isMotorCMDComplete=true;
+    }
+    else
+        m_isMotorCMDComplete=false;
+}
 
 bool CElmoMotor::CheckMotorHomed()
 {
-	return m_isHomingFinished;
+    return m_isHomingFinished;
 }
 
 void CElmoMotor::ResettoGoHome()
 {
-	m_hasGoneHome=false;
+    m_hasGoneHome=false;
 }
 
 //*****************************PID************************************//
@@ -624,7 +624,7 @@ double CSysPID::VelocityErrorP[ACTUAL_MOTOR_NUMBER];
 
 CSysPID::CSysPID()
 {
-	InitPositionToTorque();
+    InitPositionToTorque();
 };
 
 CSysPID::~CSysPID()
@@ -635,91 +635,91 @@ CSysPID::~CSysPID()
 void CSysPID::InitPositionToTorque()
 {
 
-	memset(&PositionErrorP, 0, sizeof(PositionErrorP));
-	memset(&PositionErrorI, 0, sizeof(PositionErrorI));
-	memset(&PositionErrorD, 0, sizeof(PositionErrorD));
-	memset(&PositionErrorBefore, 0, sizeof(PositionErrorBefore));
-	memset(&VelocityErrorP, 0, sizeof(VelocityErrorP));
-	memset(&VelocityErrorI, 0, sizeof(VelocityErrorI));
-	memset(&VelocityErrorD, 0, sizeof(VelocityErrorD));
-	memset(&VelocityErrorBefore, 0, sizeof(VelocityErrorBefore));
+    memset(&PositionErrorP, 0, sizeof(PositionErrorP));
+    memset(&PositionErrorI, 0, sizeof(PositionErrorI));
+    memset(&PositionErrorD, 0, sizeof(PositionErrorD));
+    memset(&PositionErrorBefore, 0, sizeof(PositionErrorBefore));
+    memset(&VelocityErrorP, 0, sizeof(VelocityErrorP));
+    memset(&VelocityErrorI, 0, sizeof(VelocityErrorI));
+    memset(&VelocityErrorD, 0, sizeof(VelocityErrorD));
+    memset(&VelocityErrorBefore, 0, sizeof(VelocityErrorBefore));
 
 };
 
 void CSysPID::DoPID(ElmoMotor::CElmoMotorData* p_Data, ElmoMotor::CElmoMotorData* p_Order,
-		int SpeedLimit, int n)
+        int SpeedLimit, int n)
 {
-	int PositionNow 	= 	0;
-	int VelocityNow 	= 	0;
-	int TorqueNow 		= 	0;
-	int PositionTarget 	=	0;
-	int VelocityTarget 	=	0;
-	int TorqueTarget	=	0;
+    int PositionNow 	= 	0;
+    int VelocityNow 	= 	0;
+    int TorqueNow 		= 	0;
+    int PositionTarget 	=	0;
+    int VelocityTarget 	=	0;
+    int TorqueTarget	=	0;
 
-	for (int i = 0; i < n; i++)
-	{
-		PositionNow = p_Data[i].Position;
-		VelocityNow = p_Data[i].Velocity;
-		TorqueNow = p_Data[i].Torque;
+    for (int i = 0; i < n; i++)
+    {
+        PositionNow = p_Data[i].Position;
+        VelocityNow = p_Data[i].Velocity;
+        TorqueNow = p_Data[i].Torque;
 
-		//*********************Position Loop*************************//
+        //*********************Position Loop*************************//
 
-		PositionTarget = p_Order[i].Position;
+        PositionTarget = p_Order[i].Position;
 
-		PositionErrorD[i] = PositionErrorP[i] - PositionErrorBefore[i];
+        PositionErrorD[i] = PositionErrorP[i] - PositionErrorBefore[i];
 
-		PositionErrorP[i] = PositionTarget - PositionNow;
+        PositionErrorP[i] = PositionTarget - PositionNow;
 
-		//first time PositionErrorI will be only the first PositionError
-		PositionErrorI[i] += PositionErrorP[i];
+        //first time PositionErrorI will be only the first PositionError
+        PositionErrorI[i] += PositionErrorP[i];
 
-		PositionErrorBefore[i] = PositionErrorP[i];
+        PositionErrorBefore[i] = PositionErrorP[i];
 
-		VelocityTarget = (int) (Kp_PosToTor_1_high * PositionErrorP[i]
-				+ Ki_PosToTor_1 * PositionErrorI[i]
-				+ Kd_PosToTor_1 * PositionErrorD[i]);
-		//OrderAgentToActuation[0].Velocity=(int)(Kp*PositionErrorP+Ki*PositionErrorI+Kd*PositionErrorD);
-		if (VelocityTarget > SpeedLimit)
-		{
-			VelocityTarget=SpeedLimit;
-			//printf("%f\t%f\t%f\t%d\n",PositionErrorP,PositionErrorI,PositionErrorD,VelocityTarget);
-		}
-		else if (VelocityTarget < -SpeedLimit)
-		{
-			VelocityTarget=-SpeedLimit;
-			//printf("%f\t%f\t%f\t%d\n",PositionErrorP,PositionErrorI,PositionErrorD,VelocityTarget);
-		}
-		//                  //VelocityTarget=VelocityTarget2;
+        VelocityTarget = (int) (Kp_PosToTor_1_high * PositionErrorP[i]
+                + Ki_PosToTor_1 * PositionErrorI[i]
+                + Kd_PosToTor_1 * PositionErrorD[i]);
+        //OrderAgentToActuation[0].Velocity=(int)(Kp*PositionErrorP+Ki*PositionErrorI+Kd*PositionErrorD);
+        if (VelocityTarget > SpeedLimit)
+        {
+            VelocityTarget=SpeedLimit;
+            //printf("%f\t%f\t%f\t%d\n",PositionErrorP,PositionErrorI,PositionErrorD,VelocityTarget);
+        }
+        else if (VelocityTarget < -SpeedLimit)
+        {
+            VelocityTarget=-SpeedLimit;
+            //printf("%f\t%f\t%f\t%d\n",PositionErrorP,PositionErrorI,PositionErrorD,VelocityTarget);
+        }
+        //                  //VelocityTarget=VelocityTarget2;
 
-		//*********************Velocity Loop*************************//
+        //*********************Velocity Loop*************************//
 
-		VelocityErrorD[i] = VelocityErrorP[i] - VelocityErrorBefore[i];
-		VelocityErrorP[i] = VelocityTarget - VelocityNow;
-		VelocityErrorI[i] += VelocityErrorP[i];
-		VelocityErrorBefore[i] = VelocityErrorP[i];
+        VelocityErrorD[i] = VelocityErrorP[i] - VelocityErrorBefore[i];
+        VelocityErrorP[i] = VelocityTarget - VelocityNow;
+        VelocityErrorI[i] += VelocityErrorP[i];
+        VelocityErrorBefore[i] = VelocityErrorP[i];
 
-		TorqueTarget = (int) (Kp_PosToTor_2 * VelocityErrorP[i] + Ki_PosToTor_2 * VelocityErrorI[i]
-				+ Kd_PosToTor_2 * VelocityErrorD[i]);
+        TorqueTarget = (int) (Kp_PosToTor_2 * VelocityErrorP[i] + Ki_PosToTor_2 * VelocityErrorI[i]
+                + Kd_PosToTor_2 * VelocityErrorD[i]);
 
-		//printf("%f\t%f\t%f\t%d\n", VelocityErrorP, VelocityErrorI,
-		//		VelocityErrorD, (int) TorqueTarget);
+        //printf("%f\t%f\t%f\t%d\n", VelocityErrorP, VelocityErrorI,
+        //		VelocityErrorD, (int) TorqueTarget);
 
-		int TorqueLimit = 2000;
-		if (TorqueTarget > TorqueLimit)
-		{
-			TorqueTarget = TorqueLimit;
-		}
-		else if (TorqueTarget < -TorqueLimit)
-		{
-			TorqueTarget = -TorqueLimit;
-		}
+        int TorqueLimit = 2000;
+        if (TorqueTarget > TorqueLimit)
+        {
+            TorqueTarget = TorqueLimit;
+        }
+        else if (TorqueTarget < -TorqueLimit)
+        {
+            TorqueTarget = -TorqueLimit;
+        }
 
-		p_Order[i].Torque = TorqueTarget;
-		p_Order[i].Position = PositionTarget;
-		p_Order[i].Velocity = VelocityTarget;
+        p_Order[i].Torque = TorqueTarget;
+        p_Order[i].Position = PositionTarget;
+        p_Order[i].Velocity = VelocityTarget;
 
 
-	}
+    }
 };
 
 
@@ -731,6 +731,7 @@ CDeviceMaster::CDeviceMaster(void)
     m_motorNum = ACTUAL_MOTOR_NUMBER;
     m_analogInputsTerminalNum = ACTUAL_EL3104_NUM;
     m_analogOutputsTerminalNum = ACTUAL_EL4002_NUM;
+    m_forceSensorNum = ACTUAL_ATI_FORCE_SENSOR_NUM;
     m_isMasterRequested = false;
     m_isMasterActivated = false;
     m_needSetTrajData=false;
@@ -743,7 +744,7 @@ CDeviceMaster::CDeviceMaster(void)
 
     for(int i=0;i<ACTUAL_MOTOR_NUMBER;i++)
     {
-    	m_driverIDs[i]=i;
+        m_driverIDs[i]=i;
     }
 
 }
@@ -767,24 +768,24 @@ CDeviceMaster::~CDeviceMaster(void)
 
 int CDeviceMaster::Initialize(const Aris::RT_CONTROL::CSysInitParameters p_InitParam)
 {
-    m_motorGeneralSettings.homeMode = p_InitParam.homeMode;
-    m_motorGeneralSettings.homeAccel = p_InitParam.homeAccel;
-    m_motorGeneralSettings.homeLowSpeed = p_InitParam.homeLowSpeed;
-    m_motorGeneralSettings.homeHighSpeed = p_InitParam.homeHighSpeed;
-    m_motorGeneralSettings.p2pMaxSpeed = p_InitParam.p2pMaxSpeed;
-    m_motorGeneralSettings.p2pSpeed = p_InitParam.p2pSpeed;
+    m_motorGeneralSettings.homeMode         = p_InitParam.homeMode;
+    m_motorGeneralSettings.homeAccel        = p_InitParam.homeAccel;
+    m_motorGeneralSettings.homeLowSpeed     = p_InitParam.homeLowSpeed;
+    m_motorGeneralSettings.homeHighSpeed    = p_InitParam.homeHighSpeed;
+    m_motorGeneralSettings.p2pMaxSpeed      = p_InitParam.p2pMaxSpeed;
+    m_motorGeneralSettings.p2pSpeed         = p_InitParam.p2pSpeed;
     m_motorGeneralSettings.nsPerCyclePeriod = p_InitParam.nsPerCyclePeriod;
-    m_motorGeneralSettings.homeTorqueLimit=p_InitParam.homeTorqueLimit;
+    m_motorGeneralSettings.homeTorqueLimit  = p_InitParam.homeTorqueLimit;
 
     m_motorNum=p_InitParam.motorNum;
 
-   // rt_printf("motor number in device init %d\n",m_motorNum);
+    // rt_printf("motor number in device init %d\n",m_motorNum);
 
     for (int i = 0; i < m_motorNum; i++)
     {
-       // m_driverIDs[i]=p_InitParam.driverIDs[i];
+        // m_driverIDs[i]=p_InitParam.driverIDs[i];
         m_homeOffsets[i] = p_InitParam.homeOffsets[i];
-     }
+    }
 
 
     int returnValue;
@@ -808,21 +809,27 @@ int CDeviceMaster::Initialize(const Aris::RT_CONTROL::CSysInitParameters p_InitP
     }
 
     // set all the Ethercat slave devices' positions
-     m_ethercatCoupler.SetEtherCATPosition(ECAT_POS_COUPLER);
+    m_ethercatCoupler.SetEtherCATPosition(ECAT_POS_COUPLER);
 
-     for (int i = 0; i < m_analogInputsTerminalNum; i++)
-     {
-         m_analogInputs[i].SetEtherCATPosition(ECAT_START_POS_EL3104 + i);
-     }
-     for (int i = 0; i < m_analogOutputsTerminalNum; i++)
-     {
-         m_analogOutputs[i].SetEtherCATPosition(ECAT_START_POS_EL4002 + i);
-     }
+    for (int i = 0; i < m_analogInputsTerminalNum; i++)
+    {
+        m_analogInputs[i].SetEtherCATPosition(ECAT_START_POS_EL3104 + i);
+    }
+    for (int i = 0; i < m_analogOutputsTerminalNum; i++)
+    {
+        m_analogOutputs[i].SetEtherCATPosition(ECAT_START_POS_EL4002 + i);
+    }
 
-     for(int i = 0; i < m_motorNum; i++)
-     {
+    for (int i = 0; i < m_forceSensorNum; i++)
+    {
+        m_forceSensor[i].SetEtherCATPosition(ECAT_START_POS_ATI_FORCE_SENSOR + i);
+    }
+
+
+    for(int i = 0; i < m_motorNum; i++)
+    {
         m_motors[i].SetEtherCATPosition(ECAT_START_POS_ELMODRIVE + i);
-     }
+    }
 
 
     //initialize all the slaves
@@ -843,6 +850,17 @@ int CDeviceMaster::Initialize(const Aris::RT_CONTROL::CSysInitParameters p_InitP
         }
     }
 
+    for (int i = 0; i < m_forceSensorNum; i++)
+    {
+        returnValue = m_forceSensor[i].Initialize(&m_pMaster);
+        if(returnValue != 0)
+        {
+            printf("Fail to initialize the force sensor No.%d\n", i);
+            return returnValue;
+        }
+    }
+
+
     for (int i = 0; i < m_analogOutputsTerminalNum; i++)
     {
         returnValue = m_analogOutputs[i].Initialize(&m_pMaster);
@@ -857,8 +875,8 @@ int CDeviceMaster::Initialize(const Aris::RT_CONTROL::CSysInitParameters p_InitP
 
     for(int i=0;i<m_motorNum;i++)
     {
-       // printf("m:%d\n",i);
-         returnValue = m_motors[i].Initialize(&m_pMaster,m_homeOffsets[i],i,m_motorGeneralSettings);
+        // printf("m:%d\n",i);
+        returnValue = m_motors[i].Initialize(&m_pMaster,m_homeOffsets[i],i,m_motorGeneralSettings);
         if(returnValue!=0)
         {
             printf("Fail to initialize the motor driver No.%d\n", i);
@@ -866,43 +884,54 @@ int CDeviceMaster::Initialize(const Aris::RT_CONTROL::CSysInitParameters p_InitP
         }
     }
 
-   // Activate the master
+    // Activate the master
     ecrt_master_activate(m_pMaster);
 
-   //  printf("Device activated!\n");
-   // Activate the slaves
+    //  printf("Device activated!\n");
+    // Activate the slaves
 
-     m_ethercatCoupler.Activate();
-     for (int i = 0; i < m_analogInputsTerminalNum; i++)
-     {
+    m_ethercatCoupler.Activate();
+    for (int i = 0; i < m_analogInputsTerminalNum; i++)
+    {
         returnValue = m_analogInputs[i].Activate();
         if (returnValue != 0)
         {
             printf("Failed to activate Analog Input!\n");
             return returnValue;
         }
-     }
+    }
 
-     for (int i = 0; i < m_analogOutputsTerminalNum; i++)
-     {
-         returnValue = m_analogOutputs[i].Activate();
-         if (returnValue != 0)
+    for (int i = 0; i < m_forceSensorNum; i++)
+    {
+        returnValue = m_forceSensor[i].Activate();
+        if (returnValue != 0)
+        {
+            printf("Failed to activate force sensor!\n");
+            return returnValue;
+        }
+    }
+
+
+    for (int i = 0; i < m_analogOutputsTerminalNum; i++)
+    {
+        returnValue = m_analogOutputs[i].Activate();
+        if (returnValue != 0)
         {
             printf("Failed to activate Analog Output!\n");
             return returnValue;
         }
-     }
+    }
 
-     for(int i = 0; i < m_motorNum; i++)
-     {
-	    returnValue = m_motors[i].Activate();
+    for(int i = 0; i < m_motorNum; i++)
+    {
+        returnValue = m_motors[i].Activate();
         if(returnValue != 0)
         {
             printf("Failed to activate Elmo driver!\n");
             return returnValue;
         }
-     }
-     m_isMasterActivated = true;
+    }
+    m_isMasterActivated = true;
 
     return 0;
 }
@@ -917,7 +946,15 @@ int CDeviceMaster::Read()
     for (int i = 0; i < m_analogInputsTerminalNum; i++)
     {
         m_analogInputs[i].Upload();
-        m_analogInputs[i].GetAnalogInputs(&(m_feedbackData.m_analogInputsData[i]));    }
+        m_analogInputs[i].GetAnalogInputs(&(m_feedbackData.m_analogInputsData[i]));    
+    }
+
+    for (int i = 0; i < m_forceSensorNum; i++)
+    {
+        m_forceSensor[i].Upload();
+        m_forceSensor[i].GetForceInputs(&(m_feedbackData.m_forceInputsData[i]));    
+    }
+
 
     for (int i = 0; i < m_analogOutputsTerminalNum; i++)
     {
@@ -936,14 +973,20 @@ int CDeviceMaster::Read()
 
 int CDeviceMaster::Write()
 {
-   for (int i = 0; i < m_analogInputsTerminalNum; i++)
+    for (int i = 0; i < m_analogInputsTerminalNum; i++)
     {
         m_analogInputs[i].Download();
     }
+
+    for (int i = 0; i < m_forceSensorNum; i++)
+    {
+        m_forceSensor[i].Download();
+    }
+
     for (int i = 0; i < m_analogOutputsTerminalNum; i++)
     {
         m_analogOutputs[i].SetAnalogOutputs(m_commandData.m_analogOutputsData[i]);
-		// copy set analog output to the feedback data
+        // copy set analog output to the feedback data
         m_feedbackData.m_analogOutputsData[i] = m_commandData.m_analogOutputsData[i];
         m_analogOutputs[i].Download();
     }
@@ -951,13 +994,13 @@ int CDeviceMaster::Write()
     for(int i = 0; i < m_motorNum; i++)
     {
         //order is important
-    //	if(m_motors[i].CheckMotorHomed()==true)
+        //	if(m_motors[i].CheckMotorHomed()==true)
 
-       m_motors[i].SetData(m_commandData.m_motorData[i]);
+        m_motors[i].SetData(m_commandData.m_motorData[i]);
 
-       m_motors[i].DoCommand();
-     //  if (m_motors[0].GetMotorState()==Aris::RT_CONTROL::EMSTAT_RUNNING)
-      //   rt_printf(" machine data command pos: %d\n", m_commandData.m_motorData[0].Position);
+        m_motors[i].DoCommand();
+        //  if (m_motors[0].GetMotorState()==Aris::RT_CONTROL::EMSTAT_RUNNING)
+        //   rt_printf(" machine data command pos: %d\n", m_commandData.m_motorData[0].Position);
         m_motors[i].Download();
     }
     ecrt_master_send(m_pMaster);
@@ -966,12 +1009,12 @@ int CDeviceMaster::Write()
 
 void CDeviceMaster::DoPID()
 {
-	/*
-	 * called in running state
-	 * velocity loop verified before
-	 * torque loop unusable
-	 */
-	m_pid.DoPID(m_feedbackData.m_motorData,m_commandData.m_motorData);
+    /*
+     * called in running state
+     * velocity loop verified before
+     * torque loop unusable
+     */
+    m_pid.DoPID(m_feedbackData.m_motorData,m_commandData.m_motorData);
 }
 
 int CDeviceMaster::DeactiveMaster()
@@ -991,40 +1034,47 @@ int CDeviceMaster::DCSyncTime( uint64_t nanoSecond )
 
 bool CDeviceMaster::CheckAllMotorsHomed ()
 {
-	for(int i=0;i<m_motorNum;i++)
-	{
-		if(m_motors[i].CheckMotorHomed()==false)
-			return false;
-	}
-	return true;
+    for(int i=0;i<m_motorNum;i++)
+    {
+        if(m_motors[i].CheckMotorHomed()==false)
+            return false;
+    }
+    return true;
 }
 
 int CDeviceMaster::DeviceDataToMachineData( Aris::RT_CONTROL::CMachineData &p_mData,long long int p_cycleCount)
 {
-	//copy feedback data
-	//cannot simply memcpy, because they have different definition
-	for(int i=0;i<ACTUAL_MOTOR_NUMBER;i++)
-	{
-		//p_mData.feedbackData[i].Position = p_dData.m_motorData[i].Position;
-		//p_mData.feedbackData[i].Velocity = p_dData.m_motorData[i].Velocity;
-		//p_mData.feedbackData[i].Torque   = p_dData.m_motorData[i].Torque;
-		p_mData.feedbackData[i].Position = m_feedbackData.m_motorData[i].Position;
-		p_mData.feedbackData[i].Velocity = m_feedbackData.m_motorData[i].Velocity;
-		p_mData.feedbackData[i].Torque	 = m_feedbackData.m_motorData[i].Torque;
-	}
-	p_mData.time=p_cycleCount;
+    //copy feedback data
+    //cannot simply memcpy, because they have different definitions
+    for(int i=0;i<ACTUAL_MOTOR_NUMBER;i++)
+    {
+        //p_mData.feedbackData[i].Position = p_dData.m_motorData[i].Position;
+        //p_mData.feedbackData[i].Velocity = p_dData.m_motorData[i].Velocity;
+        //p_mData.feedbackData[i].Torque   = p_dData.m_motorData[i].Torque;
+        p_mData.feedbackData[i].Position = m_feedbackData.m_motorData[i].Position;
+        p_mData.feedbackData[i].Velocity = m_feedbackData.m_motorData[i].Velocity;
+        p_mData.feedbackData[i].Torque	 = m_feedbackData.m_motorData[i].Torque;
+    }
+    for( int i = 0; i < m_forceSensorNum; i++)
+    {
+        for(int j = 0; j < 6; j++)
+        {
+            p_mData.forceData[i].forceValues[j] = m_feedbackData.m_forceInputsData[i].values[j];
+        }
+    }
+    p_mData.time=p_cycleCount;
 
-	return 0;
+    return 0;
 };
 
 int CDeviceMaster::MachineDataToDeviceData(const Aris::RT_CONTROL::CMachineData p_mData)
 {
-	//copy command data
-	for(int i=0;i<ACTUAL_MOTOR_NUMBER;i++)
-	{
-		m_commandData.m_motorData[i].Position = p_mData.commandData[i].Position;
-		m_commandData.m_motorData[i].Velocity = p_mData.commandData[i].Velocity;
-		m_commandData.m_motorData[i].Torque   = p_mData.commandData[i].Torque;
-	}
-	return 0;
+    //copy command data
+    for(int i=0;i<ACTUAL_MOTOR_NUMBER;i++)
+    {
+        m_commandData.m_motorData[i].Position = p_mData.commandData[i].Position;
+        m_commandData.m_motorData[i].Velocity = p_mData.commandData[i].Velocity;
+        m_commandData.m_motorData[i].Torque   = p_mData.commandData[i].Torque;
+    }
+    return 0;
 };

@@ -39,3 +39,9 @@ install_manifest.txt
 *.exe
 *.out
 *.app
+
+# build dir
+build
+
+# python executables
+*.pyc
