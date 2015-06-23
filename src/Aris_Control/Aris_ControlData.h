@@ -179,9 +179,12 @@ namespace Aris
             friend class Aris::RT_CONTROL::ACTUATION;
             public:
 
+            static const int INVALID_MSG_ID = -100;
+
             RT_MSG();
             ~RT_MSG();
 
+            bool isMessageValid(){return GetMsgID() == INVALID_MSG_ID;};
             void operator=(const RT_MSG& other);
             void SetLength(unsigned int dataLength);
             void SetMsgID(int msgID);

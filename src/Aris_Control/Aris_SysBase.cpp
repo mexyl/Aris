@@ -666,7 +666,7 @@ void CSysBase::RealtimeCore(void* arg)
 
         if(ret<0)
         {
-            CSysBase::m_rtDataRecv.SetMsgID(-100);
+            CSysBase::m_rtDataRecv.SetMsgID(Aris::RT_CONTROL::RT_MSG::INVALID_MSG_ID);
             //rt_printf("msg in RT not get!!\n");
 
         }

@@ -626,27 +626,3 @@ int Aris::RT_CONTROL::ACTUATION::Load_XML_PrintMessage()
 {
 	return sysBase->Load_XML_PrintMessages();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
