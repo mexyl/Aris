@@ -133,6 +133,7 @@ public:
 
 
 /*
+ * XYL:
  * Add model calculation reslut to CMachineData
  * The order of the data is arranged as described in the model
  *
@@ -142,12 +143,12 @@ public:
 class CAbsModelCalcData
 {
 public:
-    double Acc[AXIS_NUMBER];
+    double Acceleration[AXIS_NUMBER];
     double Velocity[AXIS_NUMBER];
     double Position[AXIS_NUMBER];
 
-    double PrismForce[AXIS_NUMBER];// calculated from the torque
-    double DynamicForce[AXIS_NUMBER];// calculated by fast dyn
+    double PrismActualForce[AXIS_NUMBER];// calculated from the torque
+    double PrismDynamicForce[AXIS_NUMBER];// calculated by fast dyn
     double ExternForce[6][3];// six leg extern force
 
 };
@@ -179,7 +180,7 @@ public:
 	CMotorData commandData[AXIS_NUMBER];//lastCommand,collected before write()
 	//sensor data
 
-    // extended by XYL for test
+    //XYL extended for test
     CAbsModelCalcData absData;
 };
 
