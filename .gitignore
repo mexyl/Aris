@@ -39,3 +39,9 @@ install_manifest.txt
 *.exe
 *.out
 *.app
+
+
+Aris.creator.user*
+bin/
+build/
+tags

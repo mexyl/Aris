@@ -130,6 +130,29 @@ public:
 	int Velocity;
 	int Torque;
 };
+
+
+/*
+ * Add model calculation reslut to CMachineData
+ * The order of the data is arranged as described in the model
+ *
+ * Modify do not modify this class frequently, or the data process will not
+*/
+
+class CAbsModelCalcData
+{
+public:
+    double Acc[AXIS_NUMBER];
+    double Velocity[AXIS_NUMBER];
+    double Position[AXIS_NUMBER];
+
+    double PrismForce[AXIS_NUMBER];// calculated from the torque
+    double DynamicForce[AXIS_NUMBER];// calculated by fast dyn
+    double ExternForce[6][3];// six leg extern force
+
+};
+
+
 /*
  * CWorkData struct should be used by TrajectoryGenerator and Logger as Input Data
  *
@@ -156,6 +179,8 @@ public:
 	CMotorData commandData[AXIS_NUMBER];//lastCommand,collected before write()
 	//sensor data
 
+    // extended by XYL for test
+    CAbsModelCalcData absData;
 };
 
 /*
