@@ -260,7 +260,7 @@ namespace Aris
 /*
  * Function pointer with peculiar parameters
  */
-typedef int (*FuncPtrWork)(Aris::RT_CONTROL::CMachineData&, Aris::RT_CONTROL::RT_MSG&);
+typedef int (*FuncPtrWork)(Aris::RT_CONTROL::CMachineData&, Aris::RT_CONTROL::RT_MSG&, Aris::RT_CONTROL::RT_MSG&);
 typedef int (*FuncPtrInit)(Aris::RT_CONTROL::CSysInitParameters&);
 typedef int (*FuncPtrState)(void*);
 typedef int (*FuncPtrCustom)(Aris::Core::MSG&);

@@ -672,7 +672,7 @@ void CSysBase::RealtimeCore(void* arg)
         }
 
         if(trajectoryGenerator!=NULL)
-            trajectoryGenerator(m_machineDataCore, m_rtDataRecv);
+            trajectoryGenerator(m_machineDataCore, m_rtDataRecv, m_rtDataSend);
 
         PushDatatoMotors();
         //machine data to motor data
