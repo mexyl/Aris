@@ -45,3 +45,4 @@ Aris.creator.user*
 bin/
 build/
 tags
+CMakeLists.txt.user
