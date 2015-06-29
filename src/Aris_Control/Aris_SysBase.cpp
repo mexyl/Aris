@@ -1079,11 +1079,19 @@ void *CSysBase::dataServer(void* arg)
                 }
                 if(m_logCount%1000==0)
 				{
-					printf("TIME:%lld %d POS:%d VEL%d POD:%d\n",m_cycleCount,
-                            m_logMachineDataBuffer.motorsStates[0],
-                            m_logMachineDataBuffer.feedbackData[0].Position,
-                            m_logMachineDataBuffer.feedbackData[0].Velocity,
-                            m_logMachineDataBuffer.commandData[0].Position);
+//					printf("TIME:%lld %d POS:%d VEL%d POD:%d\n",m_cycleCount,
+//                            m_logMachineDataBuffer.motorsStates[0],
+//                            m_logMachineDataBuffer.feedbackData[0].Position,
+//                            m_logMachineDataBuffer.feedbackData[0].Velocity,
+//                            m_logMachineDataBuffer.commandData[0].Position);
+                    printf("TIME:%lld fx:%f fy:%f fz:%f fx:%f fy:%f fz:%f \n"
+                           ,m_cycleCount
+                           ,m_logMachineDataBuffer.absData.ExternForce[0][0]
+                            ,m_logMachineDataBuffer.absData.ExternForce[0][1]
+                            ,m_logMachineDataBuffer.absData.ExternForce[0][2]
+                            ,m_logMachineDataBuffer.absData.ExternForce[2][0]
+                             ,m_logMachineDataBuffer.absData.ExternForce[2][1]
+                             ,m_logMachineDataBuffer.absData.ExternForce[2][2]);
 				}
 
 			}
