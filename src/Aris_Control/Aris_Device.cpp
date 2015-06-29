@@ -991,7 +991,7 @@ int CDeviceMaster::Write()
 
         // request the analoginput to start a zeroing procedure
         if (m_commandData.m_forceInputsData[i].isZeroingRequest){
-            m_analogInputs[i].RequestZeroing();
+            m_forceSensor[i].RequestZeroing();
             m_commandData.m_forceInputsData[i].isZeroingRequest = 0;
         }
  
