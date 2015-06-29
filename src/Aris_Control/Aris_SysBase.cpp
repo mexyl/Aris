@@ -1061,7 +1061,7 @@ void *CSysBase::dataServer(void* arg)
 
             ret = read(m_xddp_fd_data,&m_logMachineDataBuffer,sizeof(m_logMachineDataBuffer));
 //			printf("%d,%lld\n",ret,m_logDataBuffer.time);
-			if(ret>0&&m_logCount<MAX_LOG_ENTRIES)
+            if(ret>0)
 			{
 //				memcpy(&m_logData[m_logCount],&m_logDataBuffer,sizeof(m_logDataBuffer));
 
@@ -1073,8 +1073,10 @@ void *CSysBase::dataServer(void* arg)
 
 
                 //rewrite the log function
-
-                fwrite(&m_logMachineDataBuffer,sizeof(m_logMachineDataBuffer),1,fp);
+                if(m_logMachineDataBuffer.isLogging)
+                {
+                    fwrite(&m_logMachineDataBuffer,sizeof(m_logMachineDataBuffer),1,fp);
+                }
 
                 if(m_logCount%1000==0)
 				{

@@ -182,6 +182,7 @@ public:
 
     //XYL extended for test
     CAbsModelCalcData absData;
+    bool isLogging=false;
 };
 
 /*
