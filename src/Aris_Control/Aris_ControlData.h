@@ -151,6 +151,7 @@ public:
     double PrismDynamicForce[AXIS_NUMBER];// calculated by fast dyn
     double ExternForce[6][3];// six leg extern force
 
+
 };
 
 
@@ -182,6 +183,7 @@ public:
 
     //XYL extended for test
     CAbsModelCalcData absData;
+    bool IsLogging=false;
 };
 
 /*
