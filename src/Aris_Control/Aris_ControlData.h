@@ -9,7 +9,7 @@
 #define ARIS_CONTROLDATA_H_
 #include "Aris_Core.h"
 
-#define FORCE_SENSOR_NUMBER  1
+#define FORCE_SENSOR_NUMBER  0
 #define AXIS_NUMBER 18
 
 extern char ServoStateName[7][20];
@@ -117,6 +117,7 @@ namespace Aris
             public:
                 CForceData& operator=(const CForceData& other);
                 int forceValues[6];
+                int isZeroingRequest;
         };
 
         /*

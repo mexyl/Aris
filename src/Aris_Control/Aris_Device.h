@@ -448,7 +448,7 @@ namespace ElmoMotor
             //int MachineDataToDeviceData(const Aris::RT_CONTROL::CMachineData p_mData,CDeviceData &p_dData);
 
             int DeviceDataToMachineData(Aris::RT_CONTROL::CMachineData &p_mData,long long int p_cycleCount);
-            int MachineDataToDeviceData(const Aris::RT_CONTROL::CMachineData p_mData);
+            int MachineDataToDeviceData(Aris::RT_CONTROL::CMachineData &p_mData);
             void DoPID();
 
 

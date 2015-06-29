@@ -976,11 +976,25 @@ int CDeviceMaster::Write()
     for (int i = 0; i < m_analogInputsTerminalNum; i++)
     {
         m_analogInputs[i].Download();
+
+        // request the analoginput to start a zeroing procedure
+        if (m_commandData.m_analogInputsData[i].isZeroingRequest){
+            m_analogInputs[i].RequestZeroing();
+            m_commandData.m_analogInputsData[i].isZeroingRequest = 0;
+        }
+ 
     }
 
     for (int i = 0; i < m_forceSensorNum; i++)
     {
         m_forceSensor[i].Download();
+
+        // request the analoginput to start a zeroing procedure
+        if (m_commandData.m_forceInputsData[i].isZeroingRequest){
+            m_analogInputs[i].RequestZeroing();
+            m_commandData.m_forceInputsData[i].isZeroingRequest = 0;
+        }
+ 
     }
 
     for (int i = 0; i < m_analogOutputsTerminalNum; i++)
@@ -1067,7 +1081,7 @@ int CDeviceMaster::DeviceDataToMachineData( Aris::RT_CONTROL::CMachineData &p_mD
     return 0;
 };
 
-int CDeviceMaster::MachineDataToDeviceData(const Aris::RT_CONTROL::CMachineData p_mData)
+int CDeviceMaster::MachineDataToDeviceData(Aris::RT_CONTROL::CMachineData& p_mData)
 {
     //copy command data
     for(int i=0;i<ACTUAL_MOTOR_NUMBER;i++)
@@ -1076,5 +1090,11 @@ int CDeviceMaster::MachineDataToDeviceData(const Aris::RT_CONTROL::CMachineData 
         m_commandData.m_motorData[i].Velocity = p_mData.commandData[i].Velocity;
         m_commandData.m_motorData[i].Torque   = p_mData.commandData[i].Torque;
     }
+    for(int i=0; i < m_forceSensorNum; i++)
+    {
+        m_commandData.m_forceInputsData[i].isZeroingRequest = p_mData.forceData[i].isZeroingRequest;
+        p_mData.forceData[i].isZeroingRequest = 0;
+    }
     return 0;
 };
+
