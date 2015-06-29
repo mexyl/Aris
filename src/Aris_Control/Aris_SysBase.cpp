@@ -1073,7 +1073,8 @@ void *CSysBase::dataServer(void* arg)
 
 
                 //rewrite the log function
-                if(m_logMachineDataBuffer.isLogging)
+
+                if(m_logMachineDataBuffer.IsLogging)
                 {
                     fwrite(&m_logMachineDataBuffer,sizeof(m_logMachineDataBuffer),1,fp);
                 }
