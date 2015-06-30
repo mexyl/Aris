@@ -159,7 +159,7 @@ void CATIForceSensor::Upload()
 
 void CATIForceSensor::Download()
 {
-    EC_WRITE_S32(m_pDomainAllPd + m_offsetCw1,  0);
+    EC_WRITE_S32(m_pDomainAllPd + m_offsetCw1,  0x0040); // Filter set to 32Hz
     EC_WRITE_S32(m_pDomainAllPd + m_offsetCw2,  0);
     ecrt_domain_queue(m_pDomainAll);
 }
