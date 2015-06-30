@@ -661,7 +661,7 @@ void CSysBase::RealtimeCore(void* arg)
 
         if(ret>=0)
         {
-        	rt_printf("msg id GET IN RT: %d\n",m_rtDataRecv.GetMsgID());
+            //rt_printf("msg id GET IN RT: %d\n",m_rtDataRecv.GetMsgID());
         }
 
         if(ret<0)

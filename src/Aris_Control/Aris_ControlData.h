@@ -151,6 +151,10 @@ public:
     double PrismDynamicForce[AXIS_NUMBER];// calculated by fast dyn
     double ExternForce[6][3];// six leg extern force
 
+    double IMUAngle[3];
+    double IMUVel[3];
+    double IMUAcc[3];
+
 
 };
 
@@ -184,6 +188,9 @@ public:
     //XYL extended for test
     CAbsModelCalcData absData;
     bool IsLogging=false;
+    double IMURawAngle[3];
+    double IMURawVel[3];
+    double IMURawAcc[3];
 
 };
 
