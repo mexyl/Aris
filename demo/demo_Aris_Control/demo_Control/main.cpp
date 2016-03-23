@@ -1,42 +1,42 @@
-﻿#include "Platform.h"
-#include <Aris_Motion.h>
+﻿
+#include <aris_control_motion.h>
 #include <iostream>
 
-#ifdef PLATFORM_IS_LINUX
+#ifdef UNIX
 #include "ecrt.h"
 #endif
 
 int main()
 {
-	Aris::Core::DOCUMENT doc;
-#ifdef PLATFORM_IS_WINDOWS
+	Aris::Core::XmlDocument doc;
+#ifdef WIN32
 	doc.LoadFile("C:\\Robots\\resource\\Robot_Type_I\\Robot_III.xml");
 #endif
-#ifdef PLATFORM_IS_LINUX
+#ifdef UNIX
 	doc.LoadFile("/usr/Robots/resource/Robot_Type_I/Robot_III.xml");
 #endif
 
-#ifdef PLATFORM_IS_LINUX
+#ifdef UNIX
 
 
 	auto ele = doc.RootElement()->FirstChildElement("Server")
 		->FirstChildElement("Control")->FirstChildElement("EtherCat");
 
-	auto pMas = Aris::Control::ETHERCAT_MASTER::CreateMaster<Aris::Control::CONTROLLER>();
+	auto pMas = Aris::Control::EthercatMaster::createInstance<Aris::Control::EthercatController>();
 	std::cout<<"1"<<std::endl;	
-	pMas->LoadXml(ele);
+	pMas->loadXml(std::ref(*ele));
 	std::cout<<"2"<<std::endl;
-	pMas->Start();
+	pMas->start();
 	std::cout<<"3"<<std::endl;
 	
 	while (true)
 	{
-		Aris::Core::MSG msg;
-		pMas->MsgPipe().RecvInNRT(msg);
-		std::cout << "NRT msg length:" << msg.GetLength()<<" pos:" << *reinterpret_cast<std::int32_t*>(msg.GetDataAddress())<<std::endl;
+		Aris::Core::Msg msg;
+		pMas->msgPipe().recvInNrt(msg);
+		std::cout << "NRT msg length:" << msg.size()<<" pos:" << *reinterpret_cast<std::int32_t*>(msg.data())<<std::endl;
 		//msg.SetLength(10);
-		msg.Copy("congratulations\n");
-		//pMas->MsgPipe().SendToRT(msg);
+		msg.copy("congratulations\n");
+		//pMas->msgPipe().sendToRT(msg);
 	}
 	
 	
