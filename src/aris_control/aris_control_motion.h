@@ -8,9 +8,9 @@
 #include <aris_control_ethercat.h>
 
 
-namespace Aris
+namespace aris
 {
-	namespace Control
+	namespace control
 	{	
 		class EthercatMotion :public EthercatSlave
 		{
@@ -40,7 +40,7 @@ namespace Aris
 			};
 
 			virtual ~EthercatMotion();
-			EthercatMotion(const Aris::Core::XmlElement &xml_ele, const Aris::Core::XmlElement &type_xml_ele);
+			EthercatMotion(const aris::core::XmlElement &xml_ele, const aris::core::XmlElement &type_xml_ele);
 			auto hasFault()->bool;
 			auto readFeedback(RawData &data)->void;
 			auto writeCommand(const RawData &data)->void;
@@ -59,7 +59,7 @@ namespace Aris
 
 			friend class EthercatController;
 		};
-		class EthercatForceSensor :public EthercatSlave
+		class EthercatForceSensor final:public EthercatSlave
 		{
 		public:
 			struct Data
@@ -71,8 +71,16 @@ namespace Aris
 				};
 			};
 
-			EthercatForceSensor(const Aris::Core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+			EthercatForceSensor(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
 			auto readData(Data &data)->void;
+
+		protected:
+			virtual auto init()->void override
+			{
+				this->readSdo(0, force_ratio_);
+				this->readSdo(1, torque_ratio_);
+			};
+			std::int32_t force_ratio_, torque_ratio_;
 		};
 
 		class EthercatController :public EthercatMaster
@@ -83,12 +91,12 @@ namespace Aris
 				const std::vector<EthercatMotion::RawData> *last_motion_raw_data;
 				std::vector<EthercatMotion::RawData> *motion_raw_data;
 				std::vector<EthercatForceSensor::Data> *force_sensor_data;
-				const Aris::Core::MsgRT *msg_recv;
-				Aris::Core::MsgRT *msg_send;
+				const aris::core::MsgRT *msg_recv;
+				aris::core::MsgRT *msg_send;
 			};
 
 			virtual ~EthercatController();
-			virtual auto loadXml(const Aris::Core::XmlElement &xml_ele)->void override;
+			virtual auto loadXml(const aris::core::XmlElement &xml_ele)->void override;
 			virtual auto start()->void;
 			virtual auto stop()->void;
 			auto setControlStrategy(std::function<int(Data&)>)->void;
@@ -97,7 +105,7 @@ namespace Aris
 			auto motionAtPhy(int i)->EthercatMotion &;
 			auto forceSensorNum()->std::size_t;
 			auto forceSensorAt(int i)->EthercatForceSensor &;
-			auto msgPipe()->Pipe<Aris::Core::Msg>&;
+			auto msgPipe()->Pipe<aris::core::Msg>&;
 
 		protected:
 			EthercatController();

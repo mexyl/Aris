@@ -19,9 +19,9 @@
 #include "aris_control_motion.h"
 
 
-namespace Aris
+namespace aris
 {
-	namespace Control
+	namespace control
 	{
 		class EthercatMotion::Imp 
 		{
@@ -272,7 +272,7 @@ namespace Aris
 			std::uint8_t running_mode{ 9 };
 		};
 		EthercatMotion::~EthercatMotion() {}
-		EthercatMotion::EthercatMotion(const Aris::Core::XmlElement &xml_ele, const Aris::Core::XmlElement &type_xml_ele) 
+		EthercatMotion::EthercatMotion(const aris::core::XmlElement &xml_ele, const aris::core::XmlElement &type_xml_ele) 
 			:EthercatSlave(type_xml_ele), imp_(new EthercatMotion::Imp(this))
 		{
 			if (xml_ele.QueryIntAttribute("input2count", &imp_->input2count_) != tinyxml2::XML_NO_ERROR)
@@ -308,7 +308,7 @@ namespace Aris
 				throw std::runtime_error("failed to find motion attribute \"abs_id\"");
 			}
 
-			writeSdo(9, static_cast<std::int32_t>(-imp_->home_count_));
+			configSdo(9, static_cast<std::int32_t>(-imp_->home_count_));
 		};
 		auto EthercatMotion::writeCommand(const RawData &data)->void
 		{		
@@ -380,22 +380,22 @@ namespace Aris
 			std::int32_t value;
 
 			this->readPdo(0, 0, value);
-			data.Fx = value / 1000.0;
+			data.Fx = static_cast<double>(value) / force_ratio_;
 
 			this->readPdo(0, 1, value);
-			data.Fy = value / 1000.0;
+			data.Fy = static_cast<double>(value) / force_ratio_;
 
 			this->readPdo(0, 2, value);
-			data.Fz = value / 1000.0;
+			data.Fz = static_cast<double>(value) / force_ratio_;
 
 			this->readPdo(0, 3, value);
-			data.Mx = value / 1000.0;
+			data.Mx = static_cast<double>(value) / torque_ratio_;
 
 			this->readPdo(0, 4, value);
-			data.My = value / 1000.0;
+			data.My = static_cast<double>(value) / torque_ratio_;
 
 			this->readPdo(0, 5, value);
-			data.Mz = value / 1000.0;
+			data.Mz = static_cast<double>(value) / torque_ratio_;
 		}
 
 		struct EthercatController::Imp
@@ -403,7 +403,7 @@ namespace Aris
 			std::vector<int> map_phy2abs_, map_abs2phy_;
 
 			std::function<int(Data&)> strategy_;
-			Pipe<Aris::Core::Msg> msg_pipe_;
+			Pipe<aris::core::Msg> msg_pipe_;
 			std::atomic_bool is_stopping_;
 
 			std::vector<EthercatMotion *> motion_vec_;
@@ -417,10 +417,10 @@ namespace Aris
 		};
 		EthercatController::~EthercatController() {};
 		EthercatController::EthercatController() :EthercatMaster(),imp_(new Imp) {};
-		auto EthercatController::loadXml(const Aris::Core::XmlElement &xml_ele)->void
+		auto EthercatController::loadXml(const aris::core::XmlElement &xml_ele)->void
 		{
 			/*Load EtherCat slave types*/
-			std::map<std::string, const Aris::Core::XmlElement *> slaveTypeMap;
+			std::map<std::string, const aris::core::XmlElement *> slaveTypeMap;
 
 			auto pSlaveTypes = xml_ele.FirstChildElement("SlaveType");
 			for (auto type_xml_ele = pSlaveTypes->FirstChildElement(); type_xml_ele; type_xml_ele = type_xml_ele->NextSiblingElement())
@@ -492,7 +492,7 @@ namespace Aris
 			imp_->record_thread_ = std::thread([this]()
 			{
 				static std::fstream file;
-				std::string name = Aris::Core::logFileName();
+				std::string name = aris::core::logFileName();
 				name.replace(name.rfind("log.txt"), std::strlen("data.txt"), "data.txt");
 				file.open(name.c_str(), std::ios::out | std::ios::trunc);
 				
@@ -529,16 +529,16 @@ namespace Aris
 		auto EthercatController::motionAtPhy(int i)->EthercatMotion & { return *imp_->motion_vec_.at(i); };
 		auto EthercatController::forceSensorNum()->std::size_t { return imp_->force_sensor_vec_.size(); };
 		auto EthercatController::forceSensorAt(int i)->EthercatForceSensor & { return *imp_->force_sensor_vec_.at(i); };
-		auto EthercatController::msgPipe()->Pipe<Aris::Core::Msg>& { return imp_->msg_pipe_; };
+		auto EthercatController::msgPipe()->Pipe<aris::core::Msg>& { return imp_->msg_pipe_; };
 		auto EthercatController::controlStrategy()->void
 		{
 			/*构造传入strategy的参数*/
 			Data data{ &imp_->last_motion_rawdata_, &imp_->motion_rawdata_, &imp_->force_sensor_data_, nullptr, nullptr };
 			
 			/*收取消息*/
-			if (this->msgPipe().recvInRT(Aris::Core::MsgRT::instance[0]) > 0)
+			if (this->msgPipe().recvInRT(aris::core::MsgRT::instance[0]) > 0)
 			{
-				data.msg_recv = &Aris::Core::MsgRT::instance[0];
+				data.msg_recv = &aris::core::MsgRT::instance[0];
 			};
 			
 			/*读取反馈*/
