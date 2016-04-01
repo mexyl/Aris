@@ -1,8 +1,6 @@
-﻿#include "Platform.h"
+﻿#include <thread>
 
-#include <thread>
-
-#include "Aris_Message.h"
+#include "aris_core_msg_loop.h"
 
 #include <stdio.h>
 
@@ -15,15 +13,15 @@ void* Thread1(void *);
 void* Thread2(void *);
 void* Thread3(void *);
 void* Thread4(void *);
-int CallBack1(Aris::Core::MSG &);
-int CallBack2(Aris::Core::MSG &);
-int CallBack3(Aris::Core::MSG &);
-int CallBack4(Aris::Core::MSG &);
-int CallBackDefault(Aris::Core::MSG &);
+int CallBack1(aris::core::Msg &);
+int CallBack2(aris::core::Msg &);
+int CallBack3(aris::core::Msg &);
+int CallBack4(aris::core::Msg &);
+int CallBackDefault(aris::core::Msg &);
 
-using namespace Aris::Core;
+using namespace aris::core;
 
-//Aris::Core::EVENT stopEvent;
+//aris::core::EVENT stopEvent;
 
 int main()
 {
