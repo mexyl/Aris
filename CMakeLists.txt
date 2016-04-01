@@ -75,7 +75,7 @@ set(ETHERLAB_INCL_DIR "/opt/etherlab/include")
 set(ETHERLAB_LINK_DIR "/opt/etherlab/lib")
 set(ETHERLAB_LINK_LIB ethercat rt)
 set(XSENS_INCL_DIR "/usr/IMU/include")
-set(XSENS_LINK_LIB xdeviceclass xcommunication xstypes)
+set(XSENS_LINK_LIB IMU xcommunication xstypes)
 set(XSENS_LINK_DIR "/usr/IMU/lib")
 set(XNNITE_INCL_DIR "/usr/include/nite")#Driver for kinect
 set(XNNITE_LINK_DIR "/usr/lib")
