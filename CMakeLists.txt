@@ -217,7 +217,7 @@ endif(MAKE_DEMO)
 
 ############################################ install aris ############################################
 if(UNIX)
-	set(CMAKE_INSTALL_PREFIX "/usr/aris")
+	set(CMAKE_INSTALL_PREFIX "/usr/aris2")
 endif(UNIX)
 if(WIN32)
 	set(CMAKE_INSTALL_PREFIX "C:/aris")
@@ -231,17 +231,6 @@ install(DIRECTORY src/aris_control/resource/ DESTINATION resource/aris_control)
 
 ############################################ uninstall aris ############################################
 if(UNIX)
-	add_custom_target(uninstall rm -r /usr/aris)
+	add_custom_target(uninstall rm -r /usr/aris2)
 endif(UNIX)
-
-
-
-
-
-
-
-
-
-
-
 
