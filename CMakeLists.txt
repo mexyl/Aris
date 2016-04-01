@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+set( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
 
 # add prefix to every string in a variable
 FUNCTION(PREPEND var prefix)
