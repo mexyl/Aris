@@ -503,6 +503,7 @@ namespace aris
 				while (!imp_->is_stopping_)
 				{
 					imp_->record_pipe_->recvInNrt(data);
+                    /*Using a flag to indicate if we need to send data to the server*/
 
 					file << ++count << " ";
 
@@ -567,6 +568,9 @@ namespace aris
 
 			/*发送数据到记录的线程*/
 			imp_->record_pipe_->sendToNrt(imp_->motion_rawdata_);
+
+            /*Add another pipe for data distribution
+              Or using the above pipe, but a socket for itself*/
 
 			/*向外发送消息*/
 			if (data.msg_send)

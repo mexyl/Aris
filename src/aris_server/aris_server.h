@@ -41,6 +41,7 @@ namespace aris
 			const std::vector<double> *motion_feedback_pos;
 		};
 
+
 		typedef std::function<void(const std::string &cmd, const std::map<std::string, std::string> &params, aris::core::Msg &msg_out)> ParseFunc;
 
 		class ControlServer
@@ -71,7 +72,31 @@ namespace aris
 			class Imp;
 			std::unique_ptr<Imp> imp;
 		};
-	}
+        /*all things needed for emitting data to the outside*/
+        namespace data_emitter
+        {
+        struct Data
+        {
+            aris::control::EthercatController::Data ec_data;
+            aris::sensor::ImuData imu_data;
+        };
+        /*Keep it simple and stupid*/
+        class Data_Emitter
+        {
+        public:
+            /* init(): setup pipe
+             *         setup memory
+            */
+            auto init()->void;
+            auto start()->void;
+            auto close()->void;
+            auto dataEmitterPipe()->aris::control::Pipe<Data>&;
+        private:
+            aris::control::Pipe<Data> data_emitter_pipe_;
+        };
+
+        }//namespace data_emitter
+    }//namespace server
 }
 
 #endif

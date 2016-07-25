@@ -956,7 +956,9 @@ namespace aris
 					if (++imp->count_ % 1000 == 0)rt_printf("execute cmd in count: %d\n", imp->count_);
 				}
 			}
-
+            /*
+             * Add a pipe to log data, log data will send out side through udp.
+            */
 			return 0;
 		}
 		auto ControlServer::Imp::execute_cmd(int count, char *cmd_param, aris::control::EthercatController::Data &data)->int
@@ -1167,6 +1169,10 @@ namespace aris
 				this->motion_pos_[i] = static_cast<double>(data.motion_raw_data->at(i).feedback_pos) / controller_->motionAtAbs(i).pos2countRatio();
 			}
 
+            /*
+             * What the difference between this and ControlStrategy() ?
+             * Where are these two functions called?
+            */
 			// 执行gait函数 //
 			int ret = this->plan_vec_.at(param.gait_id).operator()(*model_.get(), param);
 
