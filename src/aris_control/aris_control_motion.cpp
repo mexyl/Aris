@@ -9,6 +9,10 @@
 #define rt_printf printf
 #endif
 
+// date_emitter
+#include<sys/socket.h>
+#include <netinet/in.h>
+#include<unistd.h>
 
 #include <string>
 #include <iostream>
@@ -29,6 +33,37 @@ namespace aris
     auto Data_Emitter::dataEmitterPipe()->aris::control::Pipe<Data>&
     {
         return this->data_emitter_pipe_;
+    };
+
+    auto Data_Emitter::start_udp()->void
+    {
+        if((this->udp_fd_ = socket(AF_INET, SOCK_DGRAM,0))<0)
+        {
+            perror("cannot create UDP socket");
+        }
+        else
+        {
+            printf("Create UDP socket.\n");
+        }
+        struct sockaddr_in myaddr;
+
+        memset((char *)&myaddr,0,sizeof(myaddr));
+        myaddr.sin_family = AF_INET;
+        myaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+        myaddr.sin_port = htons(666);
+        if (bind(this->udp_fd_, (struct sockaddr *)&myaddr, sizeof(myaddr)) < 0)
+        {
+            perror("UDP bind failed");
+        }
+        else
+        {
+            printf("UDP bind success.\n");
+        }
+    };
+
+    auto Data_Emitter::close_udp()->void
+    {
+        close(this->udp_fd_);
     };
 
     }
@@ -511,6 +546,7 @@ namespace aris
 				data.resize(imp_->motion_vec_.size());
                 data_emitter::Data data_emitted;
 
+                this->data_emitter_.start_udp();
 
 				long long count = -1;
 				while (!imp_->is_stopping_)

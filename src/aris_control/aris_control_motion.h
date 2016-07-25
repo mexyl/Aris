@@ -106,8 +106,12 @@ namespace aris
         {
         public:
             auto dataEmitterPipe()->aris::control::Pipe<Data>&;
+            auto start_udp()->void;
+            auto close_udp()->void;
         private:
             aris::control::Pipe<Data> data_emitter_pipe_;
+            int udp_fd_;
+
         };
 
         }//namespace data_emitter
