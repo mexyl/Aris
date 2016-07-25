@@ -1314,7 +1314,17 @@ namespace aris
 		{
 			this->imp->on_exit_callback_ = callback_func;
 		}
-	}
+
+        namespace data_emitter
+        {
+
+        auto Data_Emitter::dataEmitterPipe()->aris::control::Pipe<Data>&
+        {
+            return this->data_emitter_pipe_;
+        };
+
+        }
+    }
 }
 
 

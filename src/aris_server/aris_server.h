@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 #include <memory>
+#include <array>
 
 #include <aris_core.h>
 #include <aris_control.h>
@@ -77,19 +78,16 @@ namespace aris
         {
         struct Data
         {
-            aris::control::EthercatController::Data ec_data;
+#define MOT_NUM 18
+#define FOR_NUM 1
+            std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;
+            std::array<aris::control::EthercatForceSensor::Data,FOR_NUM> force_data;
             aris::sensor::ImuData imu_data;
         };
         /*Keep it simple and stupid*/
         class Data_Emitter
         {
         public:
-            /* init(): setup pipe
-             *         setup memory
-            */
-            auto init()->void;
-            auto start()->void;
-            auto close()->void;
             auto dataEmitterPipe()->aris::control::Pipe<Data>&;
         private:
             aris::control::Pipe<Data> data_emitter_pipe_;
