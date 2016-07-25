@@ -23,6 +23,15 @@ namespace aris
 {
 	namespace control
 	{
+    namespace data_emitter
+    {
+
+    auto Data_Emitter::dataEmitterPipe()->aris::control::Pipe<Data>&
+    {
+        return this->data_emitter_pipe_;
+    };
+
+    }
 		class EthercatMotion::Imp 
 		{
 		public:
@@ -500,12 +509,15 @@ namespace aris
 				
 				std::vector<EthercatMotion::RawData> data;
 				data.resize(imp_->motion_vec_.size());
+                data_emitter::Data data_emitted;
+
 
 				long long count = -1;
 				while (!imp_->is_stopping_)
 				{
 					imp_->record_pipe_->recvInNrt(data);
-                    /*Using a flag to indicate if we need to send data to the server*/
+                    this->data_emitter_.dataEmitterPipe().recvInNrt(data_emitted);
+
 
 					file << ++count << " ";
 

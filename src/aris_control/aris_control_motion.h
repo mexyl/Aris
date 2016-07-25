@@ -6,12 +6,17 @@
 #include <atomic>
 
 #include <aris_control_ethercat.h>
+#include <aris_sensor_imu.h>
 
 
 namespace aris
 {
 	namespace control
 	{	
+
+
+
+
 		class EthercatMotion :public EthercatSlave
 		{
 		public:
@@ -85,6 +90,28 @@ namespace aris
 			std::int32_t force_ratio_, torque_ratio_;
 		};
 
+        /*all things needed for emitting data to the outside*/
+        namespace data_emitter
+        {
+        struct Data
+        {
+        #define MOT_NUM 18
+        #define FOR_NUM 1
+            std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;
+            std::array<aris::control::EthercatForceSensor::Data,FOR_NUM> force_data;
+            aris::sensor::ImuData imu_data;
+        };
+        /*Keep it simple and stupid*/
+        class Data_Emitter
+        {
+        public:
+            auto dataEmitterPipe()->aris::control::Pipe<Data>&;
+        private:
+            aris::control::Pipe<Data> data_emitter_pipe_;
+        };
+
+        }//namespace data_emitter
+
 		class EthercatController :public EthercatMaster
 		{
 		public:
@@ -118,8 +145,14 @@ namespace aris
 			std::unique_ptr<Imp> imp_;
 
 			friend class EthercatMaster;
+
+        public:
+            data_emitter::Data_Emitter data_emitter_;
+            data_emitter::Data data_emitter_data_;
 		};
-	}
+
+
+    }
 }
 
 #endif
