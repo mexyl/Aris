@@ -5,6 +5,12 @@
 #include <thread>
 #include <atomic>
 
+// date_emitter
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
 #include <aris_control_ethercat.h>
 #include <aris_sensor_imu.h>
 
@@ -106,11 +112,22 @@ namespace aris
         {
         public:
             auto dataEmitterPipe()->aris::control::Pipe<Data>&;
-            auto start_udp()->void;
+            auto start_udp(const char *dest_addr_string)->void;
             auto close_udp()->void;
+            auto sendto_udp(void* pdata, size_t length)->int;
+            auto recvfrom_udp(void* pdata, size_t length)->int;
+
         private:
+#define BUFF_SIZE
             aris::control::Pipe<Data> data_emitter_pipe_;
-            int udp_fd_;
+            int udp_socket_fd;
+            int udp_fd_recv_;
+            char sent_buff_[BUFF_SIZE];
+            char recv_buff_[BUFF_SIZE];
+
+            struct sockaddr_in remote_addr_;
+            struct sockaddr_in host_addr_;
+
 
         };
 
@@ -151,7 +168,7 @@ namespace aris
 			friend class EthercatMaster;
 
         public:
-            data_emitter::Data_Emitter data_emitter_;
+            data_emitter::Data_Emitter system_data_emitter;
             data_emitter::Data data_emitter_data_;
 		};
 

@@ -9,10 +9,7 @@
 #define rt_printf printf
 #endif
 
-// date_emitter
-#include<sys/socket.h>
-#include <netinet/in.h>
-#include<unistd.h>
+
 
 #include <string>
 #include <iostream>
@@ -35,9 +32,17 @@ namespace aris
         return this->data_emitter_pipe_;
     };
 
-    auto Data_Emitter::start_udp()->void
+    auto Data_Emitter::start_udp(const char* dest_addr_string)->void
     {
-        if((this->udp_fd_ = socket(AF_INET, SOCK_DGRAM,0))<0)
+        static const int PORT_REMOTE = 6661;
+        static const int PORT_HOST = 6660;
+
+        static const char* HOST_ADDR_STRING = "127.0.0.1";
+
+
+
+        /* init udp_fd_sent*/
+        if((this->udp_socket_fd = socket(AF_INET, SOCK_DGRAM,IPPROTO_UDP))<0)
         {
             perror("cannot create UDP socket");
         }
@@ -47,23 +52,43 @@ namespace aris
         }
         struct sockaddr_in myaddr;
 
-        memset((char *)&myaddr,0,sizeof(myaddr));
-        myaddr.sin_family = AF_INET;
-        myaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-        myaddr.sin_port = htons(666);
-        if (bind(this->udp_fd_, (struct sockaddr *)&myaddr, sizeof(myaddr)) < 0)
+        memset((char *)&this->host_addr_,0,sizeof(this->host_addr_));
+        host_addr_.sin_family = AF_INET;
+        host_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+        host_addr_.sin_port = htons(PORT_HOST);
+        if (bind(this->udp_socket_fd, (struct sockaddr *)&host_addr_, sizeof(host_addr_)) < 0)
         {
             perror("UDP bind failed");
+            close(this->udp_socket_fd);
         }
         else
         {
             printf("UDP bind success.\n");
         }
+        /*setup remote addr*/
+        memset((char *)&this->remote_addr_,0,sizeof(this->remote_addr_));
+        remote_addr_.sin_family = AF_INET;
+//        remote_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+        remote_addr_.sin_port = htons(PORT_REMOTE);
+        inet_pton(AF_INET,dest_addr_string,&remote_addr_.sin_addr);
+
+
     };
 
     auto Data_Emitter::close_udp()->void
     {
-        close(this->udp_fd_);
+        close(this->udp_socket_fd);
+    };
+
+    auto Data_Emitter::sendto_udp(void *pdata, size_t length)->int
+    {
+        return sendto(this->udp_socket_fd,pdata,length,0,(struct sockaddr*)&remote_addr_,sizeof(remote_addr_));
+    };
+
+    auto Data_Emitter::recvfrom_udp(void *pdata, size_t length)->int
+    {
+       socklen_t addrlen=sizeof(remote_addr_);
+       return recvfrom(this->udp_socket_fd,pdata,length,0,(struct sockaddr*)&remote_addr_,&addrlen);
     };
 
     }
@@ -546,13 +571,14 @@ namespace aris
 				data.resize(imp_->motion_vec_.size());
                 data_emitter::Data data_emitted;
 
-                this->data_emitter_.start_udp();
+                this->system_data_emitter.start_udp("127.0.0.1");
+                printf("Start UDP\n");
 
 				long long count = -1;
 				while (!imp_->is_stopping_)
 				{
 					imp_->record_pipe_->recvInNrt(data);
-                    this->data_emitter_.dataEmitterPipe().recvInNrt(data_emitted);
+                    this->system_data_emitter.dataEmitterPipe().recvInNrt(data_emitted);
 
 
 					file << ++count << " ";

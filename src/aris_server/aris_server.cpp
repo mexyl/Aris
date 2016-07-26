@@ -982,7 +982,7 @@ namespace aris
                 this->controller_->data_emitter_data_.motor_data.at(i)=data.motion_raw_data->at(i);
             }
 
-            this->controller_->data_emitter_.dataEmitterPipe().sendToNrt(this->controller_->data_emitter_data_);
+            this->controller_->system_data_emitter.dataEmitterPipe().sendToNrt(this->controller_->data_emitter_data_);
 
         };
 
