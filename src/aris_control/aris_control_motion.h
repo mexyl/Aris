@@ -5,11 +5,13 @@
 #include <thread>
 #include <atomic>
 
+#ifdef UNIX
 // date_emitter
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#endif
 
 #include <aris_control_ethercat.h>
 #include <aris_sensor_imu.h>
@@ -96,6 +98,7 @@ namespace aris
 			std::int32_t force_ratio_, torque_ratio_;
 		};
 
+
         /*all things needed for emitting data to the outside*/
         namespace data_emitter
         {
@@ -107,6 +110,7 @@ namespace aris
             std::array<aris::control::EthercatForceSensor::Data,FOR_NUM> force_data;
             aris::sensor::ImuData imu_data;
         };
+#ifdef UNIX
         /*Keep it simple and stupid*/
         class Data_Emitter
         {
@@ -132,6 +136,7 @@ namespace aris
         };
 
         }//namespace data_emitter
+#endif
 
 		class EthercatController :public EthercatMaster
 		{
@@ -166,10 +171,11 @@ namespace aris
 			std::unique_ptr<Imp> imp_;
 
 			friend class EthercatMaster;
-
+#ifdef UNIX
         public:
             data_emitter::Data_Emitter system_data_emitter;
             data_emitter::Data data_emitter_data_;
+#endif
 		};
 
 

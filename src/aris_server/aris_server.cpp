@@ -968,6 +968,7 @@ namespace aris
 
 
             static ControlServer::Imp *imp = ControlServer::instance().imp.get();
+#ifdef UNIX
             /*
              * Add a pipe to log data, log data will send out side through udp.
             */
@@ -977,10 +978,6 @@ namespace aris
                 imuDataProtected = imu_->getSensorData();
                 this->controller_->data_emitter_data_.imu_data = imuDataProtected.get();
             }
-
-
-
-
 
             for(int i=0;i<data.force_sensor_data->size();i++)
             {
@@ -992,6 +989,7 @@ namespace aris
             }
 
             this->controller_->system_data_emitter.dataEmitterPipe().sendToNrt(this->controller_->data_emitter_data_);
+#endif
 
         };
 

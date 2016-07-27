@@ -24,6 +24,7 @@ namespace aris
 {
 	namespace control
 	{
+#ifdef UNIX
     namespace data_emitter
     {
 
@@ -92,6 +93,7 @@ namespace aris
     };
 
     }
+#endif
 		class EthercatMotion::Imp 
 		{
 		public:
@@ -569,16 +571,20 @@ namespace aris
 				
 				std::vector<EthercatMotion::RawData> data;
 				data.resize(imp_->motion_vec_.size());
+#ifdef UNIX
                 data_emitter::Data data_emitted;
 
                 this->system_data_emitter.start_udp("127.0.0.1");
                 printf("Start UDP\n");
+				int ret = 0;
+#endif
 
 				long long count = -1;
-                int ret=0;
+                
 				while (!imp_->is_stopping_)
 				{
 					imp_->record_pipe_->recvInNrt(data);
+#ifdef UNIX
                     ret=this->system_data_emitter.dataEmitterPipe().recvInNrt(data_emitted);
                     if(ret<0)
                     {
@@ -589,6 +595,7 @@ namespace aris
                     {
                         printf("Error in sendto_udp.\n");
                     }
+#endif
 
 					file << ++count << " ";
 
