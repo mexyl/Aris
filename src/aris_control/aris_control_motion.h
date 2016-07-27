@@ -4,6 +4,7 @@
 #include <functional>
 #include <thread>
 #include <atomic>
+#include <array>
 
 #ifdef UNIX
 // date_emitter
@@ -134,9 +135,9 @@ namespace aris
 
 
         };
-
-        }//namespace data_emitter
 #endif
+        }//namespace data_emitter
+
 
 		class EthercatController :public EthercatMaster
 		{
