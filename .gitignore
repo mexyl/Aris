@@ -2,6 +2,8 @@
 CMakeCache.txt
 CMakeLists.txt.user
 CMakeFiles
+*.cmake
+./build/*.cmake
 # Makefile     this should be commented because we have Makefile in sh folder
 cmake_install.cmake
 install_manifest.txt
