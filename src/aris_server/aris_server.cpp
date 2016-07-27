@@ -965,13 +965,22 @@ namespace aris
 		}
         auto ControlServer::Imp::emit_data(aris::control::EthercatController::Data &data)->void
         {
+
+
             static ControlServer::Imp *imp = ControlServer::instance().imp.get();
             /*
              * Add a pipe to log data, log data will send out side through udp.
             */
             aris::sensor::SensorData<aris::sensor::ImuData> imuDataProtected;
-            if (imu_) imuDataProtected = imu_->getSensorData();
-            this->controller_->data_emitter_data_.imu_data = imuDataProtected.get();
+            if (imu_)
+            {
+                imuDataProtected = imu_->getSensorData();
+                this->controller_->data_emitter_data_.imu_data = imuDataProtected.get();
+            }
+
+
+
+
 
             for(int i=0;i<data.force_sensor_data->size();i++)
             {

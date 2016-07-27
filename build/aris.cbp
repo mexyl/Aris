@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="aris" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_control">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_control.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_control" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_control/fast">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_control.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_control/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_core">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_core.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_core" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_core/fast">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_core.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_core/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_dynamic">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_dynamic.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_dynamic" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_dynamic/fast">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_dynamic.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_dynamic/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_sensor">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_sensor.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_sensor" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_sensor/fast">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_sensor.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_sensor/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_server">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_server.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_server" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="aris_server/fast">
+         <Option output="/home/leo/code6/Aris/build/lib/libaris_server.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 aris_server/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Control">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Control" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Control" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Control/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Control" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Control/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Core">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Core" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Core" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Core/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Core" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Core/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_ExpCal">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_ExpCal" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_ExpCal" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_ExpCal/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_ExpCal" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_ExpCal/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Message">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Message" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Message" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Message/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Message" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Message/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Sensor">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Sensor" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Sensor" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Sensor/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Sensor" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Sensor/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Socket_Client">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Socket_Client" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Socket_Client" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Socket_Client/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Socket_Client" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Socket_Client/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Socket_Server">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Socket_Server" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Socket_Server" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="demo_Socket_Server/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/demo_Socket_Server" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 demo_Socket_Server/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="edit_cache">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 edit_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="install">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 install" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="install/local">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 install/local" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="install/strip">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 install/strip" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="list_install_components">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 list_install_components" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="test">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 test" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="test_DynKer">
+         <Option output="/home/leo/code6/Aris/build/bin/test_DynKer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 test_DynKer" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="test_DynKer/fast">
+         <Option output="/home/leo/code6/Aris/build/bin/test_DynKer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add option="-DUNIX" />
+            <Add directory="/home/leo/code6/Aris/build" />
+            <Add directory="/home/leo/code6/Aris/src/aris_control" />
+            <Add directory="/home/leo/code6/Aris/src/aris_core" />
+            <Add directory="/home/leo/code6/Aris/src/aris_dynamic" />
+            <Add directory="/home/leo/code6/Aris/src/aris_sensor" />
+            <Add directory="/home/leo/code6/Aris/src/aris_server" />
+            <Add directory="/opt/etherlab/include" />
+            <Add directory="/usr/Aris_Dependent" />
+            <Add directory="/usr/Aris_Dependent/xsens/include" />
+            <Add directory="/usr/include/ni" />
+            <Add directory="/usr/include/nite" />
+            <Add directory="/usr/xenomai/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 test_DynKer/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="uninstall">
+         <Option working_dir="/home/leo/code6/Aris/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 uninstall" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/leo/code6/Aris/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/home/leo/code6/Aris/demo/demo_Aris_Control/demo_Control/main.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/demo/demo_Aris_Core/demo_Core/main.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/demo/demo_Aris_Core/demo_Message/main.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/demo/demo_Aris_Core/demo_Socket_Client/main.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/demo/demo_Aris_Core/demo_Socket_Server/main.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/demo/demo_Aris_ExpCal/demo_ExpCal/main.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/demo/demo_Aris_Sensor/demo_Sensor/main.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_control/aris_control_ethercat.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_control/aris_control_motion.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_control/aris_control_pipe.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_expression_calculator.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_msg.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_msg_loop.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_socket.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_xml.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/tinyxml2.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_dynamic/aris_dynamic_kernel.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_dynamic/aris_dynamic_model.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_dynamic/aris_dynamic_plan.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_sensor/aris_sensor_base.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_sensor/aris_sensor_imu.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_sensor/aris_sensor_vision.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_server/aris_server.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/test/test_DynKer.cpp">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_control/aris_control.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_control/aris_control_ethercat.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_control/aris_control_motion.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_control/aris_control_pipe.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_expression_calculator.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_msg.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_msg_loop.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_socket.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/aris_core_xml.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_core/tinyxml2.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_dynamic/aris_dynamic.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_dynamic/aris_dynamic_kernel.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_dynamic/aris_dynamic_model.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_dynamic/aris_dynamic_plan.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_sensor/aris_sensor.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_sensor/aris_sensor_base.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_sensor/aris_sensor_imu.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_sensor/aris_sensor_vision.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/src/aris_server/aris_server.h">
+      </Unit>
+      <Unit filename="/home/leo/code6/Aris/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>

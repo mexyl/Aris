@@ -575,11 +575,20 @@ namespace aris
                 printf("Start UDP\n");
 
 				long long count = -1;
+                int ret=0;
 				while (!imp_->is_stopping_)
 				{
 					imp_->record_pipe_->recvInNrt(data);
-                    this->system_data_emitter.dataEmitterPipe().recvInNrt(data_emitted);
-
+                    ret=this->system_data_emitter.dataEmitterPipe().recvInNrt(data_emitted);
+                    if(ret<0)
+                    {
+                        printf("Error in recvInNrt\n");
+                    }
+                    ret=this->system_data_emitter.sendto_udp(&data_emitted,sizeof(data_emitted));
+                    if(ret<0)
+                    {
+                        printf("Error in sendto_udp.\n");
+                    }
 
 					file << ++count << " ";
 
