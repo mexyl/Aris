@@ -28,15 +28,24 @@ namespace aris
     namespace data_emitter
     {
 
+    auto Data_Emitter::setUDP(std::string d_addr,std::string d_port,std::string l_port)->void
+    {
+        this->dest_addr=d_addr;
+        this->dest_port=d_port;
+        this->local_port=l_port;
+        std::cout<<this->dest_addr<<std::endl<<this->dest_port<<std::endl<<this->local_port<<std::endl;
+
+    };
+
     auto Data_Emitter::dataEmitterPipe()->aris::control::Pipe<Data>&
     {
         return this->data_emitter_pipe_;
     };
 
-    auto Data_Emitter::start_udp(const char* dest_addr_string)->void
+    auto Data_Emitter::start_udp()->void
     {
-        static const int PORT_REMOTE = 6661;
-        static const int PORT_HOST = 6660;
+        static int PORT_REMOTE =atoi(this->dest_port.c_str());// dest_port;
+        static int PORT_HOST = atoi(this->local_port.c_str());//local_port;
 
         static const char* HOST_ADDR_STRING = "127.0.0.1";
 
@@ -71,7 +80,7 @@ namespace aris
         remote_addr_.sin_family = AF_INET;
 //        remote_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
         remote_addr_.sin_port = htons(PORT_REMOTE);
-        inet_pton(AF_INET,dest_addr_string,&remote_addr_.sin_addr);
+        inet_pton(AF_INET,this->dest_addr.c_str(),&remote_addr_.sin_addr);
 
 
     };
@@ -575,8 +584,8 @@ namespace aris
                 data_emitter::Data data_emitted;
 
                 //this->system_data_emitter.start_udp("192.168.91.1");
-                this->system_data_emitter.start_udp("127.0.0.1");
-                printf("Start UDP\n");
+                this->system_data_emitter.start_udp();
+//                printf("Start UDP\n");
 				int ret = 0;
 #endif
 

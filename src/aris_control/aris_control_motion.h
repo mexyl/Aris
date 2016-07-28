@@ -5,6 +5,7 @@
 #include <thread>
 #include <atomic>
 #include <array>
+#include <string>
 
 #ifdef UNIX
 // date_emitter
@@ -116,13 +117,15 @@ namespace aris
         class Data_Emitter
         {
         public:
+            auto setUDP(std::string d_addr,std::string d_port,std::string l_port)->void;
             auto dataEmitterPipe()->aris::control::Pipe<Data>&;
-            auto start_udp(const char *dest_addr_string)->void;
+            auto start_udp()->void;
             auto close_udp()->void;
             auto sendto_udp(void* pdata, size_t length)->int;
             auto recvfrom_udp(void* pdata, size_t length)->int;
 
         private:
+
 #define BUFF_SIZE
             aris::control::Pipe<Data> data_emitter_pipe_;
             int udp_socket_fd;
@@ -132,6 +135,9 @@ namespace aris
 
             struct sockaddr_in remote_addr_;
             struct sockaddr_in host_addr_;
+
+            std::string dest_addr,dest_port,local_port;
+
 
 
         };
