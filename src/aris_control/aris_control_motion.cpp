@@ -574,6 +574,7 @@ namespace aris
 #ifdef UNIX
                 data_emitter::Data data_emitted;
 
+                //this->system_data_emitter.start_udp("192.168.91.1");
                 this->system_data_emitter.start_udp("127.0.0.1");
                 printf("Start UDP\n");
 				int ret = 0;
@@ -595,6 +596,14 @@ namespace aris
                     {
                         printf("Error in sendto_udp.\n");
                     }
+//                    //for debug
+//                    if(count%100==0)
+//                    {
+//                        printf("cmd:%d\n",data_emitted.motor_data.at(0).cmd);
+//                        std::cout<<"cmd :"<<(int)data_emitted.motor_data.at(0).cmd<<std::endl;
+//                        std::cout<<"target_pos:"<<data_emitted.motor_data.at(1).target_pos<<std::endl;
+
+//                    }
 #endif
 
 					file << ++count << " ";

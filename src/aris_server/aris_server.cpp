@@ -961,6 +961,7 @@ namespace aris
             // emit data
             imp->emit_data(data);
 
+
 			return 0;
 		}
         auto ControlServer::Imp::emit_data(aris::control::EthercatController::Data &data)->void
@@ -988,6 +989,8 @@ namespace aris
                 this->controller_->data_emitter_data_.motor_data.at(i)=data.motion_raw_data->at(i);
             }
 
+//            this line is ok
+//            rt_printf("cmd:%d\n",this->controller_->data_emitter_data_.motor_data.at(0).cmd);
             this->controller_->system_data_emitter.dataEmitterPipe().sendToNrt(this->controller_->data_emitter_data_);
 #endif
 
