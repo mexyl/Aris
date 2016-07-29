@@ -981,12 +981,22 @@ namespace aris
             if (imu_)
             {
                 imuDataProtected = imu_->getSensorData();
-                this->controller_->data_emitter_data_.imu_data = imuDataProtected.get();
+//                this->controller_->data_emitter_data_.imu_data = imuDataProtected.get();
+                this->controller_->data_emitter_data_.imu_data.yaw=(float)imuDataProtected.get().yaw;
+                this->controller_->data_emitter_data_.imu_data.pitch=(float)imuDataProtected.get().pitch;
+                this->controller_->data_emitter_data_.imu_data.roll=(float)imuDataProtected.get().roll;
+
             }
 
             for(int i=0;i<data.force_sensor_data->size();i++)
             {
-                this->controller_->data_emitter_data_.force_data.at(i)=data.force_sensor_data->at(i);
+                this->controller_->data_emitter_data_.force_data.at(i).Fx=(float)data.force_sensor_data->at(i).Fx;
+                this->controller_->data_emitter_data_.force_data.at(i).Fy=(float)data.force_sensor_data->at(i).Fy;
+                this->controller_->data_emitter_data_.force_data.at(i).Fz=(float)data.force_sensor_data->at(i).Fz;
+
+                this->controller_->data_emitter_data_.force_data.at(i).Mx=(float)data.force_sensor_data->at(i).Mx;
+                this->controller_->data_emitter_data_.force_data.at(i).My=(float)data.force_sensor_data->at(i).My;
+                this->controller_->data_emitter_data_.force_data.at(i).Mz=(float)data.force_sensor_data->at(i).Mz;
             }
             for(int i=0;i<data.motion_raw_data->size();i++)
             {

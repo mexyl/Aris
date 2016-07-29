@@ -104,13 +104,23 @@ namespace aris
         /*all things needed for emitting data to the outside*/
         namespace data_emitter
         {
+        struct ForceDataCompact
+        {
+            float Fx, Fy, Fz, Mx, My, Mz;
+        };
+        struct IMUDataCompact
+        {
+            float yaw,pitch,roll;
+        };
+
         struct Data
         {
         #define MOT_NUM 18
         #define FOR_NUM 1
             std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;
-            std::array<aris::control::EthercatForceSensor::Data,FOR_NUM> force_data;
-            aris::sensor::ImuData imu_data;
+            std::array<ForceDataCompact,FOR_NUM> force_data;
+            //aris::sensor::ImuData imu_data;
+            IMUDataCompact imu_data;
         };
 #ifdef UNIX
         /*Keep it simple and stupid*/
