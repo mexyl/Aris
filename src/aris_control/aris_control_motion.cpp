@@ -444,6 +444,14 @@ namespace aris
 				{
 					imp_->force_sensor_vec_.push_back(addSlave<EthercatForceSensor>(std::ref(*slaveTypeMap.at(type))));
 				}
+				else if (type == "EK1100")
+				{
+					addSlave<EthercatEK1100>(std::ref(*slaveTypeMap.at(type)));
+				}
+				else if (type == "EK1122")
+				{
+					addSlave<EthercatEK1122>(std::ref(*slaveTypeMap.at(type)));
+				}
 				else
 				{
 					throw std::runtime_error(std::string("unknown slave type of \"") + type + "\"");

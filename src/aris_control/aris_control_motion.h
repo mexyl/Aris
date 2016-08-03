@@ -83,6 +83,20 @@ namespace aris
 			std::int32_t force_ratio_, torque_ratio_;
 		};
 
+        // Beckhoff Slave station 
+        class EthercatEK1100 final: public EthercatSlave
+        {
+        public:
+			EthercatEK1100(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+        };
+
+        // Beckhoff slave 1 to 2 junction
+        class EthercatEK1122 final: public EthercatSlave
+        {
+        public:
+			EthercatEK1122(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+        };
+
 		class EthercatController :public EthercatMaster
 		{
 		public:

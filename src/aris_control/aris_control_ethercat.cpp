@@ -245,7 +245,7 @@ namespace aris
 
 					mst.imp_->read();//motors and sensors get data
 
-									 //tg begin
+                    //tg begin
 					mst.controlStrategy();
 					//tg end
 
@@ -552,6 +552,7 @@ namespace aris
 			imp_->ec_master_ = ecrt_request_master(0);
 			if (!imp_->ec_master_) { throw std::runtime_error("master request failed!"); }
 
+            // The position of the slaves are automatically determined by the order in the slave_vec
 			for (size_t i = 0; i < imp_->slave_vec_.size(); ++i)
 			{
 				imp_->slave_vec_[i]->imp_->position_ = static_cast<std::uint16_t>(i);
