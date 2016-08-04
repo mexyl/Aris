@@ -525,10 +525,13 @@ namespace aris
 			server_socket_ip_ = doc.RootElement()->FirstChildElement("Server")->Attribute("ip");
 			server_socket_port_ = doc.RootElement()->FirstChildElement("Server")->Attribute("port");
 
+#ifdef UNIX
+
             controller_->system_data_emitter.setUDP(
                         doc.RootElement()->FirstChildElement("UDP")->Attribute("remote_ip"),
                         doc.RootElement()->FirstChildElement("UDP")->Attribute("remote_port"),
                         doc.RootElement()->FirstChildElement("UDP")->Attribute("local_port"));
+#endif
 			/*begin to insert cmd nodes*/
 			auto pCmds = doc.RootElement()->FirstChildElement("Server")->FirstChildElement("Commands");
 
