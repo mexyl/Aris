@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 set( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
 
+set( CMAKE_EXPORT_COMPILE_COMMANDS 1)
 # add prefix to every string in a variable
 FUNCTION(PREPEND var prefix)
    SET(listVar "")
@@ -205,15 +206,6 @@ add_executable(demo_Sensor ${FULL_SRC})
 target_link_libraries(demo_Sensor ${ALL_LINK_LIB})
 
 endif(MAKE_DEMO)
-
-
-
-
-
-
-
-
-
 
 
 ############################################ install aris ############################################
