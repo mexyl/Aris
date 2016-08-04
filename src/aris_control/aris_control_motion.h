@@ -100,6 +100,19 @@ namespace aris
 			std::int32_t force_ratio_, torque_ratio_;
 		};
 
+        // Beckhoff Slave station 
+        class EthercatEK1100 final: public EthercatSlave
+        {
+        public:
+			EthercatEK1100(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+        };
+
+        // Beckhoff slave 1 to 2 junction
+        class EthercatEK1122 final: public EthercatSlave
+        {
+        public:
+			EthercatEK1122(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+        };
 
         /*all things needed for emitting data to the outside*/
         namespace data_emitter
@@ -115,8 +128,8 @@ namespace aris
 
         struct Data
         {
-        #define MOT_NUM 18
-        #define FOR_NUM 1
+            static const int MOT_NUM=18;
+            static const int FOR_NUM=1;
             std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;
             std::array<ForceDataCompact,FOR_NUM> force_data;
             //aris::sensor::ImuData imu_data;
@@ -136,7 +149,7 @@ namespace aris
 
         private:
 
-#define BUFF_SIZE
+            static const int BUFF_SIZE=8192;
             aris::control::Pipe<Data> data_emitter_pipe_;
             int udp_socket_fd;
             int udp_fd_recv_;
@@ -147,9 +160,6 @@ namespace aris
             struct sockaddr_in host_addr_;
 
             std::string dest_addr,dest_port,local_port;
-
-
-
         };
 #endif
         }//namespace data_emitter
