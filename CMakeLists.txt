@@ -221,7 +221,7 @@ if(UNIX)
 	set(CMAKE_INSTALL_PREFIX "/usr/aris2")
 endif(UNIX)
 if(WIN32)
-	set(CMAKE_INSTALL_PREFIX "C:/aris")
+	set(CMAKE_INSTALL_PREFIX "C:/aris2")
 endif(WIN32)
 
 

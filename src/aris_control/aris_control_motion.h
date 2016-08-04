@@ -4,14 +4,29 @@
 #include <functional>
 #include <thread>
 #include <atomic>
+#include <array>
+#include <string>
+
+#ifdef UNIX
+// date_emitter
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#endif
 
 #include <aris_control_ethercat.h>
+#include <aris_sensor_imu.h>
 
 
 namespace aris
 {
 	namespace control
 	{	
+
+
+
+
 		class EthercatMotion :public EthercatSlave
 		{
 		public:
@@ -34,9 +49,11 @@ namespace aris
 				std::int32_t target_pos{ 0 }, feedback_pos{ 0 };
 				std::int32_t target_vel{ 0 }, feedback_vel{ 0 };
 				std::int16_t target_cur{ 0 }, feedback_cur{ 0 };
-				std::uint8_t cmd{ IDLE };
+                std::uint8_t cmd{ IDLE };
 				std::uint8_t mode{ POSITION };
-				mutable std::int16_t ret{ 0 };
+                std::uint16_t statusword{ 0 };
+                mutable std::int16_t ret{ 0 };
+
 			};
 
 			virtual ~EthercatMotion();
@@ -83,6 +100,71 @@ namespace aris
 			std::int32_t force_ratio_, torque_ratio_;
 		};
 
+        // Beckhoff Slave station 
+        class EthercatEK1100 final: public EthercatSlave
+        {
+        public:
+			EthercatEK1100(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+        };
+
+        // Beckhoff slave 1 to 2 junction
+        class EthercatEK1122 final: public EthercatSlave
+        {
+        public:
+			EthercatEK1122(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+        };
+
+        /*all things needed for emitting data to the outside*/
+        namespace data_emitter
+        {
+        struct ForceDataCompact
+        {
+            float Fx, Fy, Fz, Mx, My, Mz;
+        };
+        struct IMUDataCompact
+        {
+            float yaw,pitch,roll;
+        };
+
+        struct Data
+        {
+            static const int MOT_NUM=18;
+            static const int FOR_NUM=1;
+            std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;
+            std::array<ForceDataCompact,FOR_NUM> force_data;
+            //aris::sensor::ImuData imu_data;
+            IMUDataCompact imu_data;
+        };
+#ifdef UNIX
+        /*Keep it simple and stupid*/
+        class Data_Emitter
+        {
+        public:
+            auto setUDP(std::string d_addr,std::string d_port,std::string l_port)->void;
+            auto dataEmitterPipe()->aris::control::Pipe<Data>&;
+            auto start_udp()->void;
+            auto close_udp()->void;
+            auto sendto_udp(void* pdata, size_t length)->int;
+            auto recvfrom_udp(void* pdata, size_t length)->int;
+
+        private:
+
+            static const int BUFF_SIZE=8192;
+            aris::control::Pipe<Data> data_emitter_pipe_;
+            int udp_socket_fd;
+            int udp_fd_recv_;
+            char sent_buff_[BUFF_SIZE];
+            char recv_buff_[BUFF_SIZE];
+
+            struct sockaddr_in remote_addr_;
+            struct sockaddr_in host_addr_;
+
+            std::string dest_addr,dest_port,local_port;
+        };
+#endif
+        }//namespace data_emitter
+
+
 		class EthercatController :public EthercatMaster
 		{
 		public:
@@ -116,8 +198,15 @@ namespace aris
 			std::unique_ptr<Imp> imp_;
 
 			friend class EthercatMaster;
+#ifdef UNIX
+        public:
+            data_emitter::Data_Emitter system_data_emitter;
+            data_emitter::Data data_emitter_data_;
+#endif
 		};
-	}
+
+
+    }
 }
 
 #endif

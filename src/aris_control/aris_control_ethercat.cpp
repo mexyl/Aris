@@ -245,7 +245,7 @@ namespace aris
 
 					mst.imp_->read();//motors and sensors get data
 
-									 //tg begin
+                    //tg begin
 					mst.controlStrategy();
 					//tg end
 
@@ -386,17 +386,23 @@ namespace aris
 
 			// load PDO
 			auto pdo_xml_ele = xml_ele.FirstChildElement("PDO");
-			for (auto p = pdo_xml_ele->FirstChildElement(); p; p = p->NextSiblingElement())
-			{
-				imp_->pdo_group_vec_.push_back(Imp::PdoGroup(*p, imp_.get()));
-			}
+            if (pdo_xml_ele)
+            {
+                for (auto p = pdo_xml_ele->FirstChildElement(); p; p = p->NextSiblingElement())
+                {
+                    imp_->pdo_group_vec_.push_back(Imp::PdoGroup(*p, imp_.get()));
+                }
+            }
 
 			// load SDO
 			auto sdo_xml_ele = xml_ele.FirstChildElement("SDO");
-			for (auto s = sdo_xml_ele->FirstChildElement(); s; s = s->NextSiblingElement())
-			{
-				imp_->sdo_vec_.push_back(std::unique_ptr<Imp::Sdo>(new Imp::Sdo(*s, imp_.get())));
-			}
+            if (sdo_xml_ele)
+            {
+                for (auto s = sdo_xml_ele->FirstChildElement(); s; s = s->NextSiblingElement())
+                {
+                    imp_->sdo_vec_.push_back(std::unique_ptr<Imp::Sdo>(new Imp::Sdo(*s, imp_.get())));
+                }
+            }
 
 			// create ecrt structs
 			for (auto &p_g : imp_->pdo_group_vec_)
@@ -552,6 +558,7 @@ namespace aris
 			imp_->ec_master_ = ecrt_request_master(0);
 			if (!imp_->ec_master_) { throw std::runtime_error("master request failed!"); }
 
+            // The position of the slaves are automatically determined by the order in the slave_vec
 			for (size_t i = 0; i < imp_->slave_vec_.size(); ++i)
 			{
 				imp_->slave_vec_[i]->imp_->position_ = static_cast<std::uint16_t>(i);

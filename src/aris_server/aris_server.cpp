@@ -418,6 +418,7 @@ namespace aris
 			auto sendParam(const std::string &cmd, const std::map<std::string, std::string> &params)->void;
 
 			static auto tg(aris::control::EthercatController::Data &data)->int;
+            auto emit_data(aris::control::EthercatController::Data &data)->void;
 			auto run(GaitParamBase &param, aris::control::EthercatController::Data &data)->int;
 			auto execute_cmd(int count, char *cmd, aris::control::EthercatController::Data &data)->int;
 			auto enable(const BasicFunctionParam &param, aris::control::EthercatController::Data &data)->int;
@@ -497,6 +498,7 @@ namespace aris
 
 			std::vector<double> motion_pos_;
 			friend class ControlServer;
+
 		};
 
 		auto ControlServer::Imp::loadXml(const aris::core::XmlDocument &doc)->void
@@ -523,6 +525,13 @@ namespace aris
 			server_socket_ip_ = doc.RootElement()->FirstChildElement("Server")->Attribute("ip");
 			server_socket_port_ = doc.RootElement()->FirstChildElement("Server")->Attribute("port");
 
+#ifdef UNIX
+
+            controller_->system_data_emitter.setUDP(
+                        doc.RootElement()->FirstChildElement("UDP")->Attribute("remote_ip"),
+                        doc.RootElement()->FirstChildElement("UDP")->Attribute("remote_port"),
+                        doc.RootElement()->FirstChildElement("UDP")->Attribute("local_port"));
+#endif
 			/*begin to insert cmd nodes*/
 			auto pCmds = doc.RootElement()->FirstChildElement("Server")->FirstChildElement("Commands");
 
@@ -956,9 +965,54 @@ namespace aris
 					if (++imp->count_ % 1000 == 0)rt_printf("execute cmd in count: %d\n", imp->count_);
 				}
 			}
+            // emit data
+            imp->emit_data(data);
+
 
 			return 0;
 		}
+        auto ControlServer::Imp::emit_data(aris::control::EthercatController::Data &data)->void
+        {
+
+
+            static ControlServer::Imp *imp = ControlServer::instance().imp.get();
+#ifdef UNIX
+            /*
+             * Add a pipe to log data, log data will send out side through udp.
+            */
+            aris::sensor::SensorData<aris::sensor::ImuData> imuDataProtected;
+            if (imu_)
+            {
+                imuDataProtected = imu_->getSensorData();
+//                this->controller_->data_emitter_data_.imu_data = imuDataProtected.get();
+                this->controller_->data_emitter_data_.imu_data.yaw=(float)imuDataProtected.get().yaw;
+                this->controller_->data_emitter_data_.imu_data.pitch=(float)imuDataProtected.get().pitch;
+                this->controller_->data_emitter_data_.imu_data.roll=(float)imuDataProtected.get().roll;
+
+            }
+
+            for(int i=0;i<data.force_sensor_data->size();i++)
+            {
+                this->controller_->data_emitter_data_.force_data.at(i).Fx=(float)data.force_sensor_data->at(i).Fx;
+                this->controller_->data_emitter_data_.force_data.at(i).Fy=(float)data.force_sensor_data->at(i).Fy;
+                this->controller_->data_emitter_data_.force_data.at(i).Fz=(float)data.force_sensor_data->at(i).Fz;
+
+                this->controller_->data_emitter_data_.force_data.at(i).Mx=(float)data.force_sensor_data->at(i).Mx;
+                this->controller_->data_emitter_data_.force_data.at(i).My=(float)data.force_sensor_data->at(i).My;
+                this->controller_->data_emitter_data_.force_data.at(i).Mz=(float)data.force_sensor_data->at(i).Mz;
+            }
+            for(int i=0;i<data.motion_raw_data->size();i++)
+            {
+                this->controller_->data_emitter_data_.motor_data.at(i)=data.motion_raw_data->at(i);
+            }
+
+//            this line is ok
+//            rt_printf("cmd:%d\n",this->controller_->data_emitter_data_.motor_data.at(0).cmd);
+            this->controller_->system_data_emitter.dataEmitterPipe().sendToNrt(this->controller_->data_emitter_data_);
+#endif
+
+        };
+
 		auto ControlServer::Imp::execute_cmd(int count, char *cmd_param, aris::control::EthercatController::Data &data)->int
 		{
 			int ret;
@@ -1156,6 +1210,7 @@ namespace aris
 			if (imu_) imuDataProtected = imu_->getSensorData();
 			param.imu_data = &imuDataProtected.get();
 
+
 			// 获取力传感器数据与电机数据 //
 			param.force_data = data.force_sensor_data;
 			param.motion_raw_data = data.motion_raw_data;
@@ -1167,6 +1222,10 @@ namespace aris
 				this->motion_pos_[i] = static_cast<double>(data.motion_raw_data->at(i).feedback_pos) / controller_->motionAtAbs(i).pos2countRatio();
 			}
 
+            /*
+             * What the difference between this and ControlStrategy() ?
+             * Where are these two functions called?
+            */
 			// 执行gait函数 //
 			int ret = this->plan_vec_.at(param.gait_id).operator()(*model_.get(), param);
 
@@ -1308,7 +1367,9 @@ namespace aris
 		{
 			this->imp->on_exit_callback_ = callback_func;
 		}
-	}
+
+
+    }
 }
 
 

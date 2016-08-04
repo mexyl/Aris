@@ -10,6 +10,7 @@
 #endif
 
 
+
 #include <string>
 #include <iostream>
 #include <map>
@@ -23,6 +24,85 @@ namespace aris
 {
 	namespace control
 	{
+#ifdef UNIX
+    namespace data_emitter
+    {
+
+    auto Data_Emitter::setUDP(std::string d_addr,std::string d_port,std::string l_port)->void
+    {
+        this->dest_addr=d_addr;
+        this->dest_port=d_port;
+        this->local_port=l_port;
+        std::cout<<this->dest_addr<<std::endl<<this->dest_port<<std::endl<<this->local_port<<std::endl;
+
+    };
+
+    auto Data_Emitter::dataEmitterPipe()->aris::control::Pipe<Data>&
+    {
+        return this->data_emitter_pipe_;
+    };
+
+    auto Data_Emitter::start_udp()->void
+    {
+        static int PORT_REMOTE =atoi(this->dest_port.c_str());// dest_port;
+        static int PORT_HOST = atoi(this->local_port.c_str());//local_port;
+
+        static const char* HOST_ADDR_STRING = "127.0.0.1";
+
+
+
+        /* init udp_fd_sent*/
+        if((this->udp_socket_fd = socket(AF_INET, SOCK_DGRAM,IPPROTO_UDP))<0)
+        {
+            perror("cannot create UDP socket");
+        }
+        else
+        {
+            printf("Create UDP socket.\n");
+        }
+        struct sockaddr_in myaddr;
+
+        memset((char *)&this->host_addr_,0,sizeof(this->host_addr_));
+        host_addr_.sin_family = AF_INET;
+        host_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+        host_addr_.sin_port = htons(PORT_HOST);
+        if (bind(this->udp_socket_fd, (struct sockaddr *)&host_addr_, sizeof(host_addr_)) < 0)
+        {
+            perror("UDP bind failed");
+            close(this->udp_socket_fd);
+        }
+        else
+        {
+            printf("UDP bind success.\n");
+        }
+        /*setup remote addr*/
+        memset((char *)&this->remote_addr_,0,sizeof(this->remote_addr_));
+        remote_addr_.sin_family = AF_INET;
+//        remote_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+        remote_addr_.sin_port = htons(PORT_REMOTE);
+        inet_pton(AF_INET,this->dest_addr.c_str(),&remote_addr_.sin_addr);
+
+
+    };
+
+    auto Data_Emitter::close_udp()->void
+    {
+        close(this->udp_socket_fd);
+    };
+
+    auto Data_Emitter::sendto_udp(void *pdata, size_t length)->int
+    {
+        return sendto(this->udp_socket_fd,pdata,length,0,(struct sockaddr*)&remote_addr_,sizeof(remote_addr_));
+    };
+
+    auto Data_Emitter::recvfrom_udp(void *pdata, size_t length)->int
+    {
+       socklen_t addrlen=sizeof(remote_addr_);
+       return recvfrom(this->udp_socket_fd,pdata,length,0,(struct sockaddr*)&remote_addr_,&addrlen);
+    };
+
+    }
+#endif
 		class EthercatMotion::Imp 
 		{
 		public:
@@ -198,8 +278,7 @@ namespace aris
 				else
 				{
 					std::int32_t current_pos = this->pos();
-					double Kp = 200;
-					std::int32_t desired_vel = static_cast<std::int32_t>(Kp*(pos - current_pos));
+					std::int32_t desired_vel = static_cast<std::int32_t>((this->Kp_)*(pos - current_pos));
 					
 					/*保护上下限*/
 					desired_vel = std::max(desired_vel, -max_vel_count_);
@@ -252,7 +331,8 @@ namespace aris
 			std::int32_t pos() { std::int32_t pos; pFather->readPdo(1, 0, pos); return pos + pos_offset_; };
 			std::int32_t vel() { std::int32_t vel; pFather->readPdo(1, 2, vel); return vel; };
 			std::int32_t cur() { std::int16_t cur; pFather->readPdo(2, 0, cur); return cur; };
-		
+            std::uint16_t sta() { std::uint16_t sta; pFather->readPdo(1, 3, sta); return sta; };
+
 			std::int32_t input2count_;
 			std::int32_t home_count_;
 			std::int32_t max_pos_count_;
@@ -260,6 +340,7 @@ namespace aris
 			std::int32_t max_vel_count_;
 			std::int32_t abs_id_;
 			std::int32_t phy_id_;
+            double Kp_{200};
 			
 			EthercatMotion *pFather;
 			
@@ -308,6 +389,17 @@ namespace aris
 				throw std::runtime_error("failed to find motion attribute \"abs_id\"");
 			}
 
+            // Assign specific kp gains for different types of motors if necessary
+            double kpGain = 200;
+			if (xml_ele.QueryDoubleAttribute("kp", &kpGain) != tinyxml2::XML_NO_ERROR)
+			{
+                imp_->Kp_ = 200;
+			}
+            else
+            {
+                imp_->Kp_ = kpGain;
+            }
+
 			configSdo(9, static_cast<std::int32_t>(-imp_->home_count_));
 		};
 		auto EthercatMotion::writeCommand(const RawData &data)->void
@@ -352,6 +444,7 @@ namespace aris
 			data.feedback_cur = imp_->cur();
 			data.feedback_pos = imp_->pos();
 			data.feedback_vel = imp_->vel();
+            data.statusword = imp_->sta();
 		}
 		auto EthercatMotion::hasFault()->bool
 		{
@@ -412,6 +505,9 @@ namespace aris
 			std::vector<EthercatForceSensor *> force_sensor_vec_;
 			std::vector<EthercatForceSensor::Data> force_sensor_data_;
 
+            std::vector<EthercatEK1100 *> slave_station_vec_;
+            std::vector<EthercatEK1122 *> junction_vec_;
+
 			std::unique_ptr<Pipe<std::vector<EthercatMotion::RawData> > > record_pipe_;
 			std::thread record_thread_;
 		};
@@ -431,11 +527,14 @@ namespace aris
 			/*Load all slaves*/
 			imp_->motion_vec_.clear();
 			imp_->force_sensor_vec_.clear();
+			imp_->slave_station_vec_.clear();
+			imp_->junction_vec_.clear();
 
 			auto slave_xml = xml_ele.FirstChildElement("Slave");
 			for (auto sla = slave_xml->FirstChildElement(); sla; sla = sla->NextSiblingElement())
 			{
 				std::string type{ sla->Attribute("type") };
+                printf("Adding Slave as %s\n", type.c_str());
 				if (type == "ElmoSoloWhistle")
 				{
 					imp_->motion_vec_.push_back(addSlave<EthercatMotion>(std::ref(*sla), std::ref(*slaveTypeMap.at(type))));
@@ -443,6 +542,14 @@ namespace aris
 				else if (type == "AtiForceSensor")
 				{
 					imp_->force_sensor_vec_.push_back(addSlave<EthercatForceSensor>(std::ref(*slaveTypeMap.at(type))));
+				}
+				else if (type == "EK1100")
+				{
+					imp_->slave_station_vec_.push_back(addSlave<EthercatEK1100>(std::ref(*slaveTypeMap.at(type))));
+				}
+				else if (type == "EK1122")
+				{
+					imp_->junction_vec_.push_back(addSlave<EthercatEK1122>(std::ref(*slaveTypeMap.at(type))));
 				}
 				else
 				{
@@ -498,11 +605,40 @@ namespace aris
 				
 				std::vector<EthercatMotion::RawData> data;
 				data.resize(imp_->motion_vec_.size());
+#ifdef UNIX
+                data_emitter::Data data_emitted;
+
+                //this->system_data_emitter.start_udp("192.168.91.1");
+                this->system_data_emitter.start_udp();
+//                printf("Start UDP\n");
+				int ret = 0;
+#endif
 
 				long long count = -1;
+                
 				while (!imp_->is_stopping_)
 				{
 					imp_->record_pipe_->recvInNrt(data);
+#ifdef UNIX
+                    ret=this->system_data_emitter.dataEmitterPipe().recvInNrt(data_emitted);
+                    if(ret<0)
+                    {
+                        printf("Error in recvInNrt\n");
+                    }
+                    ret=this->system_data_emitter.sendto_udp(&data_emitted,sizeof(data_emitted));
+                    if(ret<0)
+                    {
+                        printf("Error in sendto_udp.\n");
+                    }
+//                    //for debug
+//                    if(count%100==0)
+//                    {
+//                        printf("cmd:%d\n",data_emitted.motor_data.at(0).cmd);
+//                        std::cout<<"cmd :"<<(int)data_emitted.motor_data.at(0).cmd<<std::endl;
+//                        std::cout<<"target_pos:"<<data_emitted.motor_data.at(1).target_pos<<std::endl;
+
+//                    }
+#endif
 
 					file << ++count << " ";
 
@@ -567,6 +703,9 @@ namespace aris
 
 			/*发送数据到记录的线程*/
 			imp_->record_pipe_->sendToNrt(imp_->motion_rawdata_);
+
+            /*Add another pipe for data distribution
+              Or using the above pipe, but a socket for itself*/
 
 			/*向外发送消息*/
 			if (data.msg_send)
