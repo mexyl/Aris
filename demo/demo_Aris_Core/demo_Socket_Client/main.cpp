@@ -4,20 +4,20 @@
 #include <bitset>
 #include <thread>
 
-#include <Platform.h>
-#include <Aris_Socket.h>
-#include <Aris_Message.h>
 
-#ifdef PLATFORM_IS_LINUX
+#include "aris_core_socket.h"
+#include "aris_core_msg_loop.h"
+
+#ifdef UNIX
 #include <unistd.h>
 #endif
 
-#ifdef PLATFORM_IS_WINDOWS
+#ifdef WIN32
 #include <Windows.h>
 #endif
 
 using namespace std;
-using namespace Aris::Core;
+using namespace aris::core;
 
 enum ClientMessage
 {
@@ -28,7 +28,7 @@ enum ClientMessage
 };
 
 /*以下用于VS内存泄露检测*/
-#ifdef PLATFORM_IS_WINDOWS  
+#ifdef WIN32  
 #define CRTDBG_MAP_ALLOC  
 #include <stdlib.h>  
 #include <crtdbg.h>  
@@ -41,7 +41,7 @@ int main()
 {
 	
 	/*以下用于VS内存泄露检测*/
-#ifdef PLATFORM_IS_WINDOWS  
+#ifdef WIN32  
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtMemCheckpoint(&s1);
 	//_CrtSetBreakAlloc(52);
@@ -52,17 +52,17 @@ int main()
 	/*设置完毕*/
 	{
 		/*以下在不同的操作系统下设置不同的服务器IP*/
-#ifdef PLATFORM_IS_WINDOWS  
+#ifdef WIN32  
 		char RemoteIp[] = "127.0.0.1";
 #endif
-#ifdef PLATFORM_IS_LINUX  
+#ifdef UNIX  
 		char RemoteIp[] = "127.0.0.1";
 #endif
 
-		CONN VisualSystem, ControlSystem;
+		Socket VisualSystem, ControlSystem;
 
 		/*注册所有的消息函数*/
-		Aris::Core::RegisterMsgCallback(VisualSystemDataNeeded, [&VisualSystem](Aris::Core::MSG &msg)
+		aris::core::registerMsgCallback(VisualSystemDataNeeded, [&VisualSystem](aris::core::Msg &msg)
 		{
 			/*只要收到数据，就认为服务器在索取地图数据，于是生成地图并发送过去*/
 			static int i = 0;
@@ -72,99 +72,114 @@ int main()
 			cout << "Visual data needed" << endl;
 			double map[9] = { (double)i, (double)i, (double)i, (double)i, (double)i, (double)i, (double)i, (double)i, (double)i };
 
-			Aris::Core::MSG data;
-			data.Copy(map, sizeof(map));
+			aris::core::Msg data;
+			data.copy(map, sizeof(map));
 
-			VisualSystem.SendData(data);
+			VisualSystem.sendMsg(data);
 
 			return 0;
 		});
-		Aris::Core::RegisterMsgCallback(VisualSystemLost, [](Aris::Core::MSG &msg)
+		aris::core::registerMsgCallback(VisualSystemLost, [](aris::core::Msg &msg)
 		{
 			cout << "Vision system connection lost" << endl;
 
-			Aris::Core::StopMsgLoop();
+			aris::core::stopMsgLoop();
 
 			return 0;
 		});
-		Aris::Core::RegisterMsgCallback(ControlCommandReceived, [&ControlSystem](Aris::Core::MSG &msg)
+		aris::core::registerMsgCallback(ControlCommandReceived, [&ControlSystem](aris::core::Msg &msg)
 		{
 			/*只要收到数据，就认为服务器让机器人行动，于是sleep 2秒之后发送回去数据，告诉机器人已经走到位*/
 
 			cout << "begin walking" << endl;
-#ifdef PLATFORM_IS_WINDOWS
-			Sleep(2000);
+#ifdef WIN32
+			msSleep(2000);
 #endif
-#ifdef PLATFORM_IS_LINUX
+#ifdef UNIX
 			usleep(2000000);
 #endif
 
 
 
-			Aris::Core::MSG data;
-			ControlSystem.SendData(data);
+			aris::core::Msg data;
+			ControlSystem.sendMsg(data);
 			cout << "end walking" << endl;
 
 			return 0;
 
 		});
-		Aris::Core::RegisterMsgCallback(ControlSystemLost, [](Aris::Core::MSG &msg)
+		aris::core::registerMsgCallback(ControlSystemLost, [](aris::core::Msg &msg)
 		{
-			cout << "Control system connection lost" << endl;
+			cout << "control system connection lost" << endl;
 
 			return 0;
 		});
 
-		/*设置所有CONN类型的回调函数*/
-		VisualSystem.SetCallBackOnReceivedData([](Aris::Core::CONN *pConn, Aris::Core::MSG &data)
+		/*设置所有Socket类型的回调函数*/
+		VisualSystem.setOnReceivedMsg([](aris::core::Socket *pConn, aris::core::Msg &data)
 		{
-			Aris::Core::PostMsg(Aris::Core::MSG(VisualSystemDataNeeded));
+			aris::core::postMsg(aris::core::Msg(VisualSystemDataNeeded));
 
 			return 0;
 		});
-		VisualSystem.SetCallBackOnLoseConnection([](Aris::Core::CONN *pConn)
+		VisualSystem.setOnLoseConnection([](aris::core::Socket *pConn)
 		{
-			PostMsg(Aris::Core::MSG(VisualSystemLost));
+			postMsg(aris::core::Msg(VisualSystemLost));
 
 			return 0;
 		});
-		ControlSystem.SetCallBackOnReceivedData([](Aris::Core::CONN *pConn, Aris::Core::MSG &data)
+		ControlSystem.setOnReceivedMsg([](aris::core::Socket *pConn, aris::core::Msg &data)
 		{
-			Aris::Core::PostMsg(Aris::Core::MSG(ControlCommandReceived));
+			aris::core::postMsg(aris::core::Msg(ControlCommandReceived));
 
 			return 0;
 		});
-		ControlSystem.SetCallBackOnLoseConnection([](Aris::Core::CONN *pConn)
+		ControlSystem.setOnLoseConnection([](aris::core::Socket *pConn)
 		{
-			PostMsg(Aris::Core::MSG(ControlSystemLost));
+			postMsg(aris::core::Msg(ControlSystemLost));
 
 			return 0;
 		});
 
 		/*以下使用lambda函数做回调*/
-		VisualSystem.SetCallBackOnReceivedData([](Aris::Core::CONN *pConn, Aris::Core::MSG &data)
+		VisualSystem.setOnReceivedMsg([](aris::core::Socket *pConn, aris::core::Msg &data)
 		{
-			Aris::Core::PostMsg(Aris::Core::MSG(VisualSystemDataNeeded));
+			aris::core::postMsg(aris::core::Msg(VisualSystemDataNeeded));
 			return 0;
 		});
 
 		/*连接服务器*/
-		VisualSystem.Connect(RemoteIp, "5688");
-		ControlSystem.Connect(RemoteIp, "5689");
+		
+		aris::core::log("before connect");
+		try
+		{
+			VisualSystem.connect(RemoteIp, "5688");
+			ControlSystem.connect(RemoteIp, "5689");
+		}
+		catch (std::logic_error &e)
+		{
+			cout << e.what();
+			exit(0);
+		}
+		aris::core::log("after connect");
+
+
+		aris::core::Msg ret = ControlSystem.sendRequest(aris::core::Msg());
+		
+		cout << (char*)ret.data() << endl;
+
+		
 
 
 		/*开始消息循环*/
-		Aris::Core::RunMsgLoop();
+		aris::core::runMsgLoop();
 	}
 
-#ifdef PLATFORM_IS_WINDOWS  
+#ifdef WIN32  
 	_CrtMemCheckpoint(&s2);
 	if (_CrtMemDifference(&s3, &s1, &s2))
 		_CrtMemDumpStatistics(&s3);
 	//_CrtDumpMemoryLeaks();
 #endif
 	
-	int a;
-	cin >> a;
-
 }
