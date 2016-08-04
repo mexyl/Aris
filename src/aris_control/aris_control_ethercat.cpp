@@ -386,17 +386,23 @@ namespace aris
 
 			// load PDO
 			auto pdo_xml_ele = xml_ele.FirstChildElement("PDO");
-			for (auto p = pdo_xml_ele->FirstChildElement(); p; p = p->NextSiblingElement())
-			{
-				imp_->pdo_group_vec_.push_back(Imp::PdoGroup(*p, imp_.get()));
-			}
+            if (pdo_xml_ele)
+            {
+                for (auto p = pdo_xml_ele->FirstChildElement(); p; p = p->NextSiblingElement())
+                {
+                    imp_->pdo_group_vec_.push_back(Imp::PdoGroup(*p, imp_.get()));
+                }
+            }
 
 			// load SDO
 			auto sdo_xml_ele = xml_ele.FirstChildElement("SDO");
-			for (auto s = sdo_xml_ele->FirstChildElement(); s; s = s->NextSiblingElement())
-			{
-				imp_->sdo_vec_.push_back(std::unique_ptr<Imp::Sdo>(new Imp::Sdo(*s, imp_.get())));
-			}
+            if (sdo_xml_ele)
+            {
+                for (auto s = sdo_xml_ele->FirstChildElement(); s; s = s->NextSiblingElement())
+                {
+                    imp_->sdo_vec_.push_back(std::unique_ptr<Imp::Sdo>(new Imp::Sdo(*s, imp_.get())));
+                }
+            }
 
 			// create ecrt structs
 			for (auto &p_g : imp_->pdo_group_vec_)

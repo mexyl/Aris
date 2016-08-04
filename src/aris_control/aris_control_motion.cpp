@@ -198,8 +198,7 @@ namespace aris
 				else
 				{
 					std::int32_t current_pos = this->pos();
-					double Kp = 200;
-					std::int32_t desired_vel = static_cast<std::int32_t>(Kp*(pos - current_pos));
+					std::int32_t desired_vel = static_cast<std::int32_t>((this->Kp_)*(pos - current_pos));
 					
 					/*保护上下限*/
 					desired_vel = std::max(desired_vel, -max_vel_count_);
@@ -260,6 +259,7 @@ namespace aris
 			std::int32_t max_vel_count_;
 			std::int32_t abs_id_;
 			std::int32_t phy_id_;
+            double Kp_{200};
 			
 			EthercatMotion *pFather;
 			
@@ -307,6 +307,17 @@ namespace aris
 			{
 				throw std::runtime_error("failed to find motion attribute \"abs_id\"");
 			}
+
+            // Assign specific kp gains for different types of motors if necessary
+            double kpGain = 200;
+			if (xml_ele.QueryDoubleAttribute("kp", &kpGain) != tinyxml2::XML_NO_ERROR)
+			{
+                imp_->Kp_ = 200;
+			}
+            else
+            {
+                imp_->Kp_ = kpGain;
+            }
 
 			configSdo(9, static_cast<std::int32_t>(-imp_->home_count_));
 		};
@@ -412,6 +423,9 @@ namespace aris
 			std::vector<EthercatForceSensor *> force_sensor_vec_;
 			std::vector<EthercatForceSensor::Data> force_sensor_data_;
 
+            std::vector<EthercatEK1100 *> slave_station_vec_;
+            std::vector<EthercatEK1122 *> junction_vec_;
+
 			std::unique_ptr<Pipe<std::vector<EthercatMotion::RawData> > > record_pipe_;
 			std::thread record_thread_;
 		};
@@ -431,11 +445,14 @@ namespace aris
 			/*Load all slaves*/
 			imp_->motion_vec_.clear();
 			imp_->force_sensor_vec_.clear();
+			imp_->slave_station_vec_.clear();
+			imp_->junction_vec_.clear();
 
 			auto slave_xml = xml_ele.FirstChildElement("Slave");
 			for (auto sla = slave_xml->FirstChildElement(); sla; sla = sla->NextSiblingElement())
 			{
 				std::string type{ sla->Attribute("type") };
+                printf("Adding Slave as %s\n", type.c_str());
 				if (type == "ElmoSoloWhistle")
 				{
 					imp_->motion_vec_.push_back(addSlave<EthercatMotion>(std::ref(*sla), std::ref(*slaveTypeMap.at(type))));
@@ -446,11 +463,11 @@ namespace aris
 				}
 				else if (type == "EK1100")
 				{
-					addSlave<EthercatEK1100>(std::ref(*slaveTypeMap.at(type)));
+					imp_->slave_station_vec_.push_back(addSlave<EthercatEK1100>(std::ref(*slaveTypeMap.at(type))));
 				}
 				else if (type == "EK1122")
 				{
-					addSlave<EthercatEK1122>(std::ref(*slaveTypeMap.at(type)));
+					imp_->junction_vec_.push_back(addSlave<EthercatEK1122>(std::ref(*slaveTypeMap.at(type))));
 				}
 				else
 				{
