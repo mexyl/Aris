@@ -442,6 +442,7 @@ namespace aris
 			std::atomic_bool is_running_{false};
 			
 			ControlServer *server_;
+            long total_count = 0;
 
 			// 实时循环中的步态参数 //
 			enum { CMD_POOL_SIZE = 50 };
@@ -620,6 +621,7 @@ namespace aris
 		{
 			if (!is_running_)
 			{
+                total_count = 0;
 				is_running_ = true;
 				motion_pos_.resize(controller_->motionNum());
 				if (imu_)imu_->start();
@@ -907,6 +909,7 @@ namespace aris
 		auto ControlServer::Imp::tg(aris::control::EthercatController::Data &data)->int
 		{
 			static ControlServer::Imp *imp = ControlServer::instance().imp.get();
+            imp->total_count++;
 
 			// 检查是否出错 //
 			static int fault_count = 0;
@@ -973,13 +976,13 @@ namespace aris
 		}
         auto ControlServer::Imp::emit_data(aris::control::EthercatController::Data &data)->void
         {
-
-
             static ControlServer::Imp *imp = ControlServer::instance().imp.get();
 #ifdef UNIX
             /*
              * Add a pipe to log data, log data will send out side through udp.
             */
+            this->controller_->data_emitter_data_.timecount = imp->total_count;
+
             aris::sensor::SensorData<aris::sensor::ImuData> imuDataProtected;
             if (imu_)
             {
@@ -1006,8 +1009,6 @@ namespace aris
                 this->controller_->data_emitter_data_.motor_data.at(i)=data.motion_raw_data->at(i);
             }
 
-//            this line is ok
-//            rt_printf("cmd:%d\n",this->controller_->data_emitter_data_.motor_data.at(0).cmd);
             this->controller_->system_data_emitter.dataEmitterPipe().sendToNrt(this->controller_->data_emitter_data_);
 #endif
 

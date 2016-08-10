@@ -507,8 +507,6 @@ namespace aris
 
             std::vector<EthercatEK1100 *> slave_station_vec_;
             std::vector<EthercatEK1122 *> junction_vec_;
-
-			std::unique_ptr<Pipe<std::vector<EthercatMotion::RawData> > > record_pipe_;
 			std::thread record_thread_;
 		};
 		EthercatController::~EthercatController() {};
@@ -576,9 +574,6 @@ namespace aris
 			imp_->motion_rawdata_.resize(imp_->motion_vec_.size());
 			imp_->last_motion_rawdata_.resize(imp_->motion_vec_.size());
 			imp_->force_sensor_data_.resize(imp_->force_sensor_vec_.size());
-
-
-			imp_->record_pipe_.reset(new Pipe<std::vector<EthercatMotion::RawData> >(true, imp_->motion_vec_.size()));
 		}
 		auto EthercatController::setControlStrategy(std::function<int(Data&)> strategy)->void
 		{
@@ -601,14 +596,13 @@ namespace aris
 				static std::fstream file;
 				std::string name = aris::core::logFileName();
 				name.replace(name.rfind("log.txt"), std::strlen("data.txt"), "data.txt");
-				file.open(name.c_str(), std::ios::out | std::ios::trunc);
+				file.open(name.c_str(), std::ios::out | std::ios::trunc | std::ios::binary);
 				
 				std::vector<EthercatMotion::RawData> data;
 				data.resize(imp_->motion_vec_.size());
 #ifdef UNIX
                 data_emitter::Data data_emitted;
 
-                //this->system_data_emitter.start_udp("192.168.91.1");
                 this->system_data_emitter.start_udp();
 //                printf("Start UDP\n");
 				int ret = 0;
@@ -618,37 +612,27 @@ namespace aris
                 
 				while (!imp_->is_stopping_)
 				{
-					imp_->record_pipe_->recvInNrt(data);
 #ifdef UNIX
                     ret=this->system_data_emitter.dataEmitterPipe().recvInNrt(data_emitted);
                     if(ret<0)
                     {
                         printf("Error in recvInNrt\n");
                     }
-                    ret=this->system_data_emitter.sendto_udp(&data_emitted,sizeof(data_emitted));
+                    
+                    if (count % 50 == 0) // We send data report to client at 20Hz
+                    {
+                        ret=this->system_data_emitter.sendto_udp(&data_emitted,sizeof(data_emitted));
+                    }
                     if(ret<0)
                     {
                         printf("Error in sendto_udp.\n");
                     }
-//                    //for debug
-//                    if(count%100==0)
-//                    {
-//                        printf("cmd:%d\n",data_emitted.motor_data.at(0).cmd);
-//                        std::cout<<"cmd :"<<(int)data_emitted.motor_data.at(0).cmd<<std::endl;
-//                        std::cout<<"target_pos:"<<data_emitted.motor_data.at(1).target_pos<<std::endl;
-
-//                    }
 #endif
 
-					file << ++count << " ";
-
-					for (auto &d : data)
-					{
-						file << d.feedback_pos << " ";
-						file << d.target_pos << " ";
-						file << d.feedback_cur << " ";
-					}
-					file << std::endl;
+                    if (count % 2 == 0)
+                    { // We record data to file at 500Hz
+                        file.write((char*)&data_emitted, sizeof(data_emitted));
+                    }
 				}
 
 				file.close();
@@ -700,9 +684,6 @@ namespace aris
 				motionAtAbs(i).writeCommand(imp_->motion_rawdata_[i]);
 				imp_->last_motion_rawdata_[i] = imp_->motion_rawdata_[i];
 			}
-
-			/*发送数据到记录的线程*/
-			imp_->record_pipe_->sendToNrt(imp_->motion_rawdata_);
 
             /*Add another pipe for data distribution
               Or using the above pipe, but a socket for itself*/
