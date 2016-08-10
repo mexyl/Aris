@@ -67,7 +67,7 @@ set(CMAKE_BUILD_TYPE "Release")
 
 # set include and lib folders
 if(UNIX)
-set(GENERAL_INCL_DIR "/usr/Aris_Dependent")
+#set(GENERAL_INCL_DIR "/usr/Aris_Dependent")
 set(SYSTEM_LINK_LIB pthread)
 set(XENOMAI_INCL_DIR "/usr/xenomai/include")
 set(XENOMAI_LINK_DIR "/usr/xenomai/lib")

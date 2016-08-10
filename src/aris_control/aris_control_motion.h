@@ -130,7 +130,7 @@ namespace aris
         {
             static const int MOT_NUM=19;
             static const int FOR_NUM=6;
-            long timecount;
+            int32_t timecount;
             IMUDataCompact imu_data;
             std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;
             std::array<ForceDataCompact,FOR_NUM> force_data;
