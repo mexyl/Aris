@@ -128,13 +128,13 @@ namespace aris
 
         struct Data
         {
-            static const int MOT_NUM=18;
-            static const int FOR_NUM=1;
+            static const int MOT_NUM=19;
+            static const int FOR_NUM=6;
             long timecount;
+            IMUDataCompact imu_data;
             std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;
             std::array<ForceDataCompact,FOR_NUM> force_data;
             //aris::sensor::ImuData imu_data;
-            IMUDataCompact imu_data;
         };
 #ifdef UNIX
         /*Keep it simple and stupid*/
