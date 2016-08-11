@@ -331,6 +331,7 @@ namespace aris
 			std::int32_t pos() { std::int32_t pos; pFather->readPdo(1, 0, pos); return pos + pos_offset_; };
 			std::int32_t vel() { std::int32_t vel; pFather->readPdo(1, 2, vel); return vel; };
 			std::int32_t cur() { std::int16_t cur; pFather->readPdo(2, 0, cur); return cur; };
+            std::uint32_t dgi() { std::uint32_t dgi; pFather->readPdo(1, 1, dgi); return dgi; };
             std::uint16_t sta() { std::uint16_t sta; pFather->readPdo(1, 3, sta); return sta; };
 
 			std::int32_t input2count_;
@@ -445,6 +446,7 @@ namespace aris
 			data.feedback_pos = imp_->pos();
 			data.feedback_vel = imp_->vel();
             data.statusword = imp_->sta();
+            data.feedback_dgi = imp_->dgi();
 		}
 		auto EthercatMotion::hasFault()->bool
 		{
@@ -473,23 +475,62 @@ namespace aris
 			std::int32_t value;
 
 			this->readPdo(0, 0, value);
-			data.Fx = static_cast<double>(value) / force_ratio_;
+			raw_data_.Fx = static_cast<double>(value) / force_ratio_;
 
 			this->readPdo(0, 1, value);
-			data.Fy = static_cast<double>(value) / force_ratio_;
+			raw_data_.Fy = static_cast<double>(value) / force_ratio_;
 
 			this->readPdo(0, 2, value);
-			data.Fz = static_cast<double>(value) / force_ratio_;
+			raw_data_.Fz = static_cast<double>(value) / force_ratio_;
 
 			this->readPdo(0, 3, value);
-			data.Mx = static_cast<double>(value) / torque_ratio_;
+			raw_data_.Mx = static_cast<double>(value) / torque_ratio_;
 
 			this->readPdo(0, 4, value);
-			data.My = static_cast<double>(value) / torque_ratio_;
+			raw_data_.My = static_cast<double>(value) / torque_ratio_;
 
 			this->readPdo(0, 5, value);
-			data.Mz = static_cast<double>(value) / torque_ratio_;
+			raw_data_.Mz = static_cast<double>(value) / torque_ratio_;
+
+            // if zeroing is required, average the raw readings and recalculate the base reading
+            if (zeroing_count_left_ > 0)
+            {
+                zeroing_count_left_ --;
+                for(int i = 0; i < 6; i++)
+                {
+                    sum_data_.fce[i] += raw_data_.fce[i];
+                }
+            }
+            else if (zeroing_count_left_ == 0)
+            {
+                // update the base reading
+                for(int i = 0; i < 6; i++)
+                {
+                    base_data_.fce[i] = sum_data_.fce[i]/ZEROING_COUNT;
+                }
+                zeroing_count_left_ --;
+            }
+
+            // return the force reading after substracting the base reading
+            for(int i = 0; i < 6; i++)
+            {
+                data.fce[i] = raw_data_.fce[i] - base_data_.fce[i];
+            }
 		}
+
+        auto EthercatForceSensor::requireZeroing() -> void
+        {
+            // if still in zeroing process, reject this request
+            if (zeroing_count_left_ >= 0)
+                return;
+
+            // prepare to zero the reading of sensor
+            for(auto value : sum_data_.fce)
+            {
+                value = 0;
+            }
+            zeroing_count_left_ = ZEROING_COUNT;
+        }
 
 		struct EthercatController::Imp
 		{
@@ -686,6 +727,16 @@ namespace aris
 				motionAtAbs(i).writeCommand(imp_->motion_rawdata_[i]);
 				imp_->last_motion_rawdata_[i] = imp_->motion_rawdata_[i];
 			}
+
+            // Handle the zeroing request from the strategy()
+            for (std::size_t i = 0; i < imp_->force_sensor_data_.size(); ++i)
+            {
+                if (imp_->force_sensor_data_.at(i).isZeroingRequested)
+                {
+                    imp_->force_sensor_vec_.at(i)->requireZeroing();
+                    imp_->force_sensor_data_.at(i).isZeroingRequested = false;
+                }
+            }
 
             /*Add another pipe for data distribution
               Or using the above pipe, but a socket for itself*/

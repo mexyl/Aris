@@ -52,8 +52,8 @@ namespace aris
                 std::uint8_t cmd{ IDLE };
 				std::uint8_t mode{ POSITION };
                 std::uint16_t statusword{ 0 };
+                std::int32_t feedback_dgi{ 0 };
                 mutable std::int16_t ret{ 0 };
-
 			};
 
 			virtual ~EthercatMotion();
@@ -86,18 +86,31 @@ namespace aris
 					struct { double Fx, Fy, Fz, Mx, My, Mz; };
 					double fce[6];
 				};
+                bool isZeroingRequested;
 			};
 
 			EthercatForceSensor(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
 			auto readData(Data &data)->void;
+            auto requireZeroing() -> void;
 
 		protected:
+            static const int ZEROING_COUNT = 500;
 			virtual auto init()->void override
 			{
 				this->readSdo(0, force_ratio_);
 				this->readSdo(1, torque_ratio_);
+                this->zeroing_count_left_ = -1;
+
+                for(auto value : base_data_.fce)
+                {
+                    value = 0;
+                }
 			};
 			std::int32_t force_ratio_, torque_ratio_;
+            EthercatForceSensor::Data base_data_;
+            EthercatForceSensor::Data sum_data_;
+            EthercatForceSensor::Data raw_data_;
+            std::int32_t zeroing_count_left_;
 		};
 
         // Beckhoff Slave station 
