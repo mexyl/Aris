@@ -627,12 +627,13 @@ namespace aris
                     {
                         printf("Error in sendto_udp.\n");
                     }
-#endif
+
 
                     if (count % 2 == 0)
                     { // We record data to file at 500Hz
                         file.write((char*)&data_emitted, sizeof(data_emitted));
                     }
+#endif
                     count++;
 				}
 
