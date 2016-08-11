@@ -527,11 +527,17 @@ namespace aris
 			server_socket_port_ = doc.RootElement()->FirstChildElement("Server")->Attribute("port");
 
 #ifdef UNIX
-
-            controller_->system_data_emitter.setUDP(
-                        doc.RootElement()->FirstChildElement("UDP")->Attribute("remote_ip"),
-                        doc.RootElement()->FirstChildElement("UDP")->Attribute("remote_port"),
-                        doc.RootElement()->FirstChildElement("UDP")->Attribute("local_port"));
+			auto udp_ele = doc.RootElement()->FirstChildElement("UDP");
+			if( udp_ele && udp_ele->Attribute("remote_ip") &&  udp_ele->Attribute("remote_port") && udp_ele->Attribute("local_port") ){
+				controller_->system_data_emitter.setUDP(
+						udp_ele->Attribute("remote_ip"),
+						udp_ele->Attribute("remote_port"),
+						udp_ele->Attribute("local_port"));
+			}
+			else
+			{
+				throw std::runtime_error("invalid xml file, no valid UDP node found");
+			}
 #endif
 			/*begin to insert cmd nodes*/
 			auto pCmds = doc.RootElement()->FirstChildElement("Server")->FirstChildElement("Commands");

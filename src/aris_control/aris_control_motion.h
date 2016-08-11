@@ -129,7 +129,7 @@ namespace aris
         struct Data
         {
             static const int MOT_NUM=19;
-            static const int FOR_NUM=6;
+            static const int FOR_NUM=7;
             int32_t timecount;
             IMUDataCompact imu_data;
             std::array<aris::control::EthercatMotion::RawData,MOT_NUM> motor_data;

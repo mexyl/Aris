@@ -633,6 +633,7 @@ namespace aris
                     { // We record data to file at 500Hz
                         file.write((char*)&data_emitted, sizeof(data_emitted));
                     }
+                    count++;
 				}
 
 				file.close();
