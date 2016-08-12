@@ -509,6 +509,7 @@ namespace aris
                     base_data_.fce[i] = sum_data_.fce[i]/ZEROING_COUNT;
                 }
                 zeroing_count_left_ --;
+                rt_printf("Zeroing completed\n");
             }
 
             // return the force reading after substracting the base reading
@@ -530,6 +531,7 @@ namespace aris
                 value = 0;
             }
             zeroing_count_left_ = ZEROING_COUNT;
+            rt_printf("Zeroing started\n");
         }
 
 		struct EthercatController::Imp
