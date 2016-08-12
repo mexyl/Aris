@@ -425,6 +425,7 @@ namespace aris
 			auto disable(const BasicFunctionParam &param, aris::control::EthercatController::Data &data)->int;
 			auto home(const BasicFunctionParam &param, aris::control::EthercatController::Data &data)->int;
 			auto fake_home(const BasicFunctionParam &param, aris::control::EthercatController::Data &data)->int;
+			auto zero_force(const BasicFunctionParam &param, aris::control::EthercatController::Data &data)->int;
 
 		private:
 			enum RobotCmdID
@@ -434,6 +435,7 @@ namespace aris
 				HOME,
 				RUN_GAIT,
 				FAKE_HOME,
+                ZERO_FORCE,
 
 				ROBOT_CMD_COUNT
 			};
@@ -482,6 +484,13 @@ namespace aris
 				BasicFunctionParam param;
 				param.cmd_type = Imp::RobotCmdID::FAKE_HOME;
 				std::fill_n(param.active_motor, this->model_->motionPool().size(), true);
+				msg.copyStruct(param);
+			} };
+
+            ParseFunc parse_zeroing_force_{ [this](const std::string &cmd, const std::map<std::string, std::string> &params, aris::core::Msg &msg)
+			{
+				BasicFunctionParam param;
+				param.cmd_type = Imp::RobotCmdID::ZERO_FORCE;
 				msg.copyStruct(param);
 			} };
 
@@ -886,6 +895,12 @@ namespace aris
 				if (cmd_msg.size() != sizeof(BasicFunctionParam))throw std::runtime_error("invalid msg length of parse function for fake_home");
 				reinterpret_cast<BasicFunctionParam *>(cmd_msg.data())->cmd_type = ControlServer::Imp::FAKE_HOME;
 			}
+            else if (cmd == "zo")
+            {
+				parse_zeroing_force_(cmd, params, cmd_msg);
+				if (cmd_msg.size() != sizeof(BasicFunctionParam))throw std::runtime_error("invalid msg length of parse function for zero_force");
+				reinterpret_cast<BasicFunctionParam *>(cmd_msg.data())->cmd_type = ControlServer::Imp::ZERO_FORCE;
+            }
 			else
 			{
 				auto cmdPair = this->cmd_id_map_.find(cmd);
@@ -944,6 +959,12 @@ namespace aris
 			{
 				fault_count = 0;
 			}
+            
+            // reset the command for force sensors
+            for (std::size_t i = 0; i < data.force_sensor_data->size(); i++)
+            {
+                data.force_sensor_data->at(i).isZeroingRequested = false;
+            }
 
 			// 查看是否有新cmd //
 			if (data.msg_recv)
@@ -976,7 +997,6 @@ namespace aris
 			}
             // emit data
             imp->emit_data(data);
-
 
 			return 0;
 		}
@@ -1039,6 +1059,9 @@ namespace aris
 				break;
 			case FAKE_HOME:
 				ret = fake_home(static_cast<BasicFunctionParam &>(*param), data);
+				break;
+            case ZERO_FORCE:
+				ret = zero_force(static_cast<BasicFunctionParam &>(*param), data);
 				break;
 			case RUN_GAIT:
 				ret = run(static_cast<GaitParamBase &>(*param), data);
@@ -1208,6 +1231,17 @@ namespace aris
 
 			return 0;
 		};
+		auto ControlServer::Imp::zero_force(const BasicFunctionParam &param, aris::control::EthercatController::Data &data)->int
+		{
+            for (std::size_t i = 0; i < data.force_sensor_data->size(); i++)
+            {
+                data.force_sensor_data->at(i).isZeroingRequested = true;
+            }
+
+            rt_printf("Clear force\n");
+
+			return 0;
+		};
 		auto ControlServer::Imp::run(GaitParamBase &param, aris::control::EthercatController::Data &data)->int
 		{
 			static ControlServer::Imp *imp = ControlServer::instance().imp.get();
@@ -1242,7 +1276,9 @@ namespace aris
 				if (param.active_motor[i])
 				{
 					data.motion_raw_data->operator[](i).cmd = aris::control::EthercatMotion::RUN;
-					data.motion_raw_data->operator[](i).target_pos = static_cast<std::int32_t>(model_->motionPool().at(i).motPos() * controller_->motionAtAbs(i).pos2countRatio());
+					data.motion_raw_data->operator[](i).target_pos = 
+                        static_cast<std::int32_t>(model_->motionPool().at(i).motPos() * 
+                                controller_->motionAtAbs(i).pos2countRatio());
 				}
 			}
 
