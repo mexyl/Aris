@@ -526,7 +526,7 @@ namespace aris
                 return;
 
             // prepare to zero the reading of sensor
-            for(auto value : sum_data_.fce)
+            for(auto& value : sum_data_.fce)
             {
                 value = 0;
             }
