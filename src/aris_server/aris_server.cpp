@@ -551,11 +551,11 @@ namespace aris
             auto log_ele = doc.RootElement()->FirstChildElement("nolog");
             if(!log_ele)
             {
-                controller_->IsLog=true;
+                controller_->isLog=true;
             }
             else
             {
-                controller_->IsLog=false;
+                controller_->isLog=false;
             }
 
 

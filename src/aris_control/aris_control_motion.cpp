@@ -637,14 +637,11 @@ namespace aris
 			imp_->record_thread_ = std::thread([this]()
 			{
 				static std::fstream file;
-                if(IsLog)
-                {
-                    std::string name = aris::core::logFileName();
-                    name.replace(name.rfind("log.txt"), std::strlen("data.txt"), "data.txt");
-                    file.open(name.c_str(), std::ios::out | std::ios::trunc | std::ios::binary);
-                }
 
-				
+                std::string name = aris::core::logFileName();
+                name.replace(name.rfind("log.txt"), std::strlen("data.txt"), "data.txt");
+                file.open(name.c_str(), std::ios::out | std::ios::trunc | std::ios::binary);
+
 				std::vector<EthercatMotion::RawData> data;
 				data.resize(imp_->motion_vec_.size());
 #ifdef UNIX
@@ -676,7 +673,7 @@ namespace aris
                     }
 
 
-                    if (count % 2 == 0&&IsLog)
+                    if (isLog && count % 2 == 0)
                     { // We record data to file at 500Hz
                         file.write((char*)&data_emitted, sizeof(data_emitted));
                     }
@@ -684,7 +681,7 @@ namespace aris
                     count++;
 				}
 
-                if(IsLog)
+                if(isLog)
                 {
                     file.close();
                 }

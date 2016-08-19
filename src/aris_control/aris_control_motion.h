@@ -218,7 +218,7 @@ namespace aris
             data_emitter::Data_Emitter system_data_emitter;
             data_emitter::Data data_emitter_data_;
 #endif
-            bool IsLog=true;
+            bool isLog=true;
 		};
 
 
