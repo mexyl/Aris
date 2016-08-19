@@ -548,6 +548,17 @@ namespace aris
 				throw std::runtime_error("invalid xml file, no valid UDP node found");
 			}
 #endif
+            auto log_ele = doc.RootElement()->FirstChildElement("nolog");
+            if(!log_ele)
+            {
+                controller_->isLog=true;
+            }
+            else
+            {
+                controller_->isLog=false;
+            }
+
+
 			/*begin to insert cmd nodes*/
 			auto pCmds = doc.RootElement()->FirstChildElement("Server")->FirstChildElement("Commands");
 

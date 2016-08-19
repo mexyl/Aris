@@ -179,6 +179,7 @@ namespace aris
         }//namespace data_emitter
 
 
+
 		class EthercatController :public EthercatMaster
 		{
 		public:
@@ -217,6 +218,7 @@ namespace aris
             data_emitter::Data_Emitter system_data_emitter;
             data_emitter::Data data_emitter_data_;
 #endif
+            bool isLog=true;
 		};
 
 
