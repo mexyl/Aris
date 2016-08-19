@@ -681,10 +681,7 @@ namespace aris
                     count++;
 				}
 
-                if(isLog)
-                {
-                    file.close();
-                }
+                file.close();
 
 			});
 			
