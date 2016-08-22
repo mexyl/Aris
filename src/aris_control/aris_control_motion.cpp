@@ -334,6 +334,7 @@ namespace aris
             std::uint32_t dgi() { std::uint32_t dgi; pFather->readPdo(1, 1, dgi); return dgi; };
             std::uint16_t sta() { std::uint16_t sta; pFather->readPdo(1, 3, sta); return sta; };
 
+            std::int32_t home_mode_;
 			std::int32_t input2count_;
 			std::int32_t home_count_;
 			std::int32_t max_pos_count_;
@@ -341,6 +342,7 @@ namespace aris
 			std::int32_t max_vel_count_;
 			std::int32_t abs_id_;
 			std::int32_t phy_id_;
+            
             double Kp_{200};
 			
 			EthercatMotion *pFather;
@@ -391,15 +393,24 @@ namespace aris
 			}
 
             // Assign specific kp gains for different types of motors if necessary
-            double kpGain = 200;
-			if (xml_ele.QueryDoubleAttribute("kp", &kpGain) != tinyxml2::XML_NO_ERROR)
+            double kp_gain = 200;
+			if (xml_ele.QueryDoubleAttribute("kp", &kp_gain) != tinyxml2::XML_NO_ERROR)
 			{
                 imp_->Kp_ = 200;
 			}
             else
             {
-                imp_->Kp_ = kpGain;
+                imp_->Kp_ = kp_gain;
             }
+
+            // Assign specific home mode for different types of motors if necessary
+            double hm_mode;
+			if (xml_ele.QueryDoubleAttribute("sp_hm_mode", &hm_mode) == tinyxml2::XML_NO_ERROR)
+			{
+                imp_->home_mode_ = hm_mode;
+                configSdo(0, static_cast<std::int32_t>(imp_->home_mode_));
+                printf("Motor %d's home mode has been set to %d\n", imp_->phy_id_, imp_->home_mode_);
+			}
 
 			configSdo(9, static_cast<std::int32_t>(-imp_->home_count_));
 		};
