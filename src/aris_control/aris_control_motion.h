@@ -204,6 +204,12 @@ namespace aris
 			auto forceSensorAt(int i)->EthercatForceSensor &;
 			auto msgPipe()->Pipe<aris::core::Msg>&;
 
+#ifdef UNIX
+            data_emitter::Data_Emitter system_data_emitter;
+            data_emitter::Data data_emitter_data_;
+#endif
+            bool isLog=true;
+
 		protected:
 			EthercatController();
 			virtual auto controlStrategy()->void override final;
@@ -213,12 +219,7 @@ namespace aris
 			std::unique_ptr<Imp> imp_;
 
 			friend class EthercatMaster;
-#ifdef UNIX
-        public:
-            data_emitter::Data_Emitter system_data_emitter;
-            data_emitter::Data data_emitter_data_;
-#endif
-            bool isLog=true;
+
 		};
 
 
