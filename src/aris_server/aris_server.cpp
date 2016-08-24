@@ -1274,10 +1274,6 @@ namespace aris
 				this->motion_pos_[i] = static_cast<double>(data.motion_raw_data->at(i).feedback_pos) / controller_->motionAtAbs(i).pos2countRatio();
 			}
 
-            /*
-             * What the difference between this and ControlStrategy() ?
-             * Where are these two functions called?
-            */
 			// 执行gait函数 //
 			int ret = this->plan_vec_.at(param.gait_id).operator()(*model_.get(), param);
 

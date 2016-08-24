@@ -37,7 +37,7 @@ struct GaitParamBase :BasicFunctionParam
     bool if_check_pos_continuous{ true };
     std::int32_t gait_id;
     const aris::sensor::ImuData *imu_data;
-    const std::vector<aris::control::EthercatForceSensor::Data> *force_data;
+    std::vector<aris::control::EthercatForceSensor::Data> *force_data;
     const std::vector<aris::control::EthercatMotion::RawData> *motion_raw_data;
     const std::vector<aris::control::EthercatMotion::RawData> *last_motion_raw_data;
     const std::vector<double> *motion_feedback_pos;

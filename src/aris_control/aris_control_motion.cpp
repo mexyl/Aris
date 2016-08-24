@@ -404,11 +404,11 @@ namespace aris
             }
 
             // Assign specific home mode for different types of motors if necessary
-            double hm_mode;
-			if (xml_ele.QueryDoubleAttribute("sp_hm_mode", &hm_mode) == tinyxml2::XML_NO_ERROR)
+            int32_t hm_mode;
+			if (xml_ele.QueryIntAttribute("sp_hm_mode", &hm_mode) == tinyxml2::XML_NO_ERROR)
 			{
                 imp_->home_mode_ = hm_mode;
-                configSdo(0, static_cast<std::int32_t>(imp_->home_mode_));
+                configSdo(0, static_cast<std::int8_t>(imp_->home_mode_));
                 printf("Motor %d's home mode has been set to %d\n", imp_->phy_id_, imp_->home_mode_);
 			}
 
@@ -481,6 +481,19 @@ namespace aris
 			return imp_->pos_offset_;
 		}
 
+        EthercatForceSensor::EthercatForceSensor(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele)
+        {
+            if (xml_ele.QueryIntAttribute("abs_id", &abs_id_) != tinyxml2::XML_NO_ERROR)
+            {
+                throw std::runtime_error("failed to find force sensor attribute \"abs_id\"");
+            }
+        };
+
+        auto EthercatForceSensor::absID() -> std::int32_t
+        {
+            return abs_id_;
+        }
+
 		auto EthercatForceSensor::readData(Data &data)->void
 		{
 			std::int32_t value;
@@ -547,7 +560,12 @@ namespace aris
 
 		struct EthercatController::Imp
 		{
-			std::vector<int> map_phy2abs_, map_abs2phy_;
+            // map for motors
+			std::vector<int> motor_map_phy2abs_;
+            std::vector<int> motor_map_abs2phy_; 
+            // map for force sensors
+			std::vector<int> force_sensor_map_phy2abs_; 
+            std::vector<int> force_sensor_map_abs2phy_; 
 
 			std::function<int(Data&)> strategy_;
 			Pipe<aris::core::Msg> msg_pipe_;
@@ -609,19 +627,36 @@ namespace aris
 				}
 			}
 
-			/*update map*/
-			imp_->map_phy2abs_.resize(imp_->motion_vec_.size());
-			imp_->map_abs2phy_.resize(imp_->motion_vec_.size());
+			/*update map for motors*/
+			imp_->motor_map_phy2abs_.resize(imp_->motion_vec_.size());
+			imp_->motor_map_abs2phy_.resize(imp_->motion_vec_.size());
 
 			for (std::size_t i = 0; i < imp_->motion_vec_.size(); ++i)
 			{
-				imp_->map_phy2abs_[i] = imp_->motion_vec_[i]->absID();
+				imp_->motor_map_phy2abs_[i] = imp_->motion_vec_[i]->absID();
 				motionAtPhy(i).imp_->phy_id_ = i;
 			}
 
 			for (std::size_t i = 0; i < imp_->motion_vec_.size(); ++i)
 			{
-				imp_->map_abs2phy_[i] = std::find(imp_->map_phy2abs_.begin(), imp_->map_phy2abs_.end(), i) - imp_->map_phy2abs_.begin();
+				imp_->motor_map_abs2phy_[i] = 
+                    std::find(imp_->motor_map_phy2abs_.begin(), imp_->motor_map_phy2abs_.end(), i)
+                     - imp_->motor_map_phy2abs_.begin();
+			}
+
+            // update map for force sensors
+			imp_->force_sensor_map_abs2phy_.resize(imp_->motion_vec_.size());
+			imp_->force_sensor_map_phy2abs_.resize(imp_->motion_vec_.size());
+
+			for (std::size_t i = 0; i < imp_->force_sensor_vec_.size(); ++i)
+			{
+				imp_->force_sensor_map_phy2abs_[i] = imp_->force_sensor_vec_[i]->absID();
+			}
+			for (std::size_t i = 0; i < imp_->force_sensor_vec_.size(); ++i)
+			{
+				imp_->force_sensor_map_abs2phy_[i] = 
+                    std::find(imp_->force_sensor_map_phy2abs_.begin(), imp_->force_sensor_map_phy2abs_.end(), i)
+                    - imp_->force_sensor_map_phy2abs_.begin();
 			}
 
 			/*resize other var*/
@@ -703,10 +738,11 @@ namespace aris
 			this->EthercatMaster::stop();
 		}
 		auto EthercatController::motionNum()->std::size_t { return imp_->motion_vec_.size(); };
-		auto EthercatController::motionAtAbs(int i)->EthercatMotion & { return *imp_->motion_vec_.at(imp_->map_abs2phy_[i]); };
+		auto EthercatController::motionAtAbs(int i)->EthercatMotion & { return *imp_->motion_vec_.at(imp_->motor_map_abs2phy_[i]); };
 		auto EthercatController::motionAtPhy(int i)->EthercatMotion & { return *imp_->motion_vec_.at(i); };
 		auto EthercatController::forceSensorNum()->std::size_t { return imp_->force_sensor_vec_.size(); };
-		auto EthercatController::forceSensorAt(int i)->EthercatForceSensor & { return *imp_->force_sensor_vec_.at(i); };
+		auto EthercatController::forceSensorAtAbs(int i)->EthercatForceSensor & { return *imp_->force_sensor_vec_.at(imp_->force_sensor_map_abs2phy_[i]); };
+		auto EthercatController::forceSensorAtPhy(int i)->EthercatForceSensor & { return *imp_->force_sensor_vec_.at(i); };
 		auto EthercatController::msgPipe()->Pipe<aris::core::Msg>& { return imp_->msg_pipe_; };
 		auto EthercatController::controlStrategy()->void
 		{
@@ -726,7 +762,7 @@ namespace aris
 			}
 			for (std::size_t i = 0; i < imp_->force_sensor_vec_.size(); ++i)
 			{
-				imp_->force_sensor_vec_.at(i)->readData(imp_->force_sensor_data_[i]);
+				forceSensorAtAbs(i).readData(imp_->force_sensor_data_[i]);
 			}
 			
 			/*执行自定义的控制策略*/
@@ -748,7 +784,7 @@ namespace aris
             {
                 if (imp_->force_sensor_data_.at(i).isZeroingRequested)
                 {
-                    imp_->force_sensor_vec_.at(i)->requireZeroing();
+                    forceSensorAtAbs(i).requireZeroing();
                     imp_->force_sensor_data_.at(i).isZeroingRequested = false;
                 }
             }

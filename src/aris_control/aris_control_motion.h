@@ -23,10 +23,6 @@ namespace aris
 {
 	namespace control
 	{	
-
-
-
-
 		class EthercatMotion :public EthercatSlave
 		{
 		public:
@@ -65,6 +61,7 @@ namespace aris
 			auto phyID()->std::int32_t;
 			auto maxPosCount()->std::int32_t;
 			auto minPosCount()->std::int32_t;
+
 			auto maxVelCount()->std::int32_t;
 			auto pos2countRatio()->std::int32_t;
 			auto setPosOffset(std::int32_t offset)->void;
@@ -89,7 +86,10 @@ namespace aris
                 bool isZeroingRequested;
 			};
 
-			EthercatForceSensor(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele){};
+			EthercatForceSensor(const aris::core::XmlElement &xml_ele);
+
+            auto absID() -> std::int32_t;
+
 			auto readData(Data &data)->void;
             auto requireZeroing() -> void;
 
@@ -106,6 +106,7 @@ namespace aris
                     value = 0;
                 }
 			};
+            std::int32_t abs_id_;
 			std::int32_t force_ratio_, torque_ratio_;
             EthercatForceSensor::Data base_data_;
             EthercatForceSensor::Data sum_data_;
@@ -201,7 +202,8 @@ namespace aris
 			auto motionAtAbs(int i)->EthercatMotion &;
 			auto motionAtPhy(int i)->EthercatMotion &;
 			auto forceSensorNum()->std::size_t;
-			auto forceSensorAt(int i)->EthercatForceSensor &;
+			auto forceSensorAtPhy(int i)->EthercatForceSensor &;
+			auto forceSensorAtAbs(int i)->EthercatForceSensor &;
 			auto msgPipe()->Pipe<aris::core::Msg>&;
 
 #ifdef UNIX
