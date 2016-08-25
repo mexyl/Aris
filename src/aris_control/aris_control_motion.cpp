@@ -481,18 +481,18 @@ namespace aris
 			return imp_->pos_offset_;
 		}
 
-        EthercatForceSensor::EthercatForceSensor(const aris::core::XmlElement &xml_ele): EthercatSlave(xml_ele)
-        {
-            if (xml_ele.QueryIntAttribute("abs_id", &abs_id_) != tinyxml2::XML_NO_ERROR)
-            {
-                throw std::runtime_error("failed to find force sensor attribute \"abs_id\"");
-            }
-        };
+		EthercatForceSensor::EthercatForceSensor(const aris::core::XmlElement &xml_ele, const aris::core::XmlElement &type_xml_ele) : EthercatSlave(type_xml_ele)
+		{
+			if (xml_ele.QueryIntAttribute("abs_id", &abs_id_) != tinyxml2::XML_NO_ERROR)
+			{
+				throw std::runtime_error("failed to find force sensor attribute \"abs_id\"");
+			}
+		};
 
-        auto EthercatForceSensor::absID() -> std::int32_t
-        {
-            return abs_id_;
-        }
+		auto EthercatForceSensor::absID() -> std::int32_t
+		{
+			return abs_id_;
+		}
 
 		auto EthercatForceSensor::readData(Data &data)->void
 		{
@@ -611,7 +611,7 @@ namespace aris
 				}
 				else if (type == "AtiForceSensor")
 				{
-					imp_->force_sensor_vec_.push_back(addSlave<EthercatForceSensor>(std::ref(*slaveTypeMap.at(type))));
+					imp_->force_sensor_vec_.push_back(addSlave<EthercatForceSensor>(std::ref(*sla), std::ref(*slaveTypeMap.at(type))));
 				}
 				else if (type == "EK1100")
 				{
